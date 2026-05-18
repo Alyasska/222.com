@@ -1,49 +1,31 @@
 import { motion } from 'framer-motion';
-import styles from './VinylPlayer.module.css';
 
-// Angles measured clockwise from the arm's natural vertical (headshell pointing down).
-// At rest (+30°) the headshell swings right, off the record.
-// At play (–45°) it sweeps left onto the outer groove.
-const REST_DEG  =  30;
-const PLAY_DEG  = -45;
+const REST_DEG = 15;
+const PLAY_DEG = 35;
 
 export default function Tonearm({ playing }) {
   return (
-    <div className={styles.tonearmAnchor}>
+    <div className="absolute top-5 right-7 lg:top-6 lg:right-8 w-16 h-44 lg:h-56 z-20 pointer-events-none">
+      {/* Pivot base */}
+      <div className="absolute top-0 right-0 w-12 h-12 lg:w-14 lg:h-14 bg-zinc-300 rounded-full shadow-xl border border-zinc-400 flex items-center justify-center z-10">
+        <div className="w-7 h-7 lg:w-8 lg:h-8 rounded-full bg-zinc-200 border-2 border-zinc-400 flex items-center justify-center">
+          <div className="w-2 h-2 rounded-full bg-zinc-800" />
+        </div>
+      </div>
+
+      {/* Arm */}
       <motion.div
-        className={styles.armSvgWrap}
-        style={{ transformOrigin: '50% 50%' }}
+        className="absolute top-6 right-6 lg:top-7 lg:right-7 w-2 h-36 lg:h-44 origin-top"
         initial={{ rotate: REST_DEG }}
         animate={{ rotate: playing ? PLAY_DEG : REST_DEG }}
         transition={{ type: 'spring', stiffness: 180, damping: 42 }}
       >
-        {/*
-          SVG adapted from Codrops RecordPlayer (MIT licence).
-          viewBox 0 0 800 800 — pivot circle is at exact centre (400, 400).
-          Colors changed to match the warm silver palette.
-        */}
-        <svg className={styles.armSvg} viewBox="0 0 800 800">
-          {/* Arm tube */}
-          <path
-            fill="#B0B0C0"
-            d="M354.5,761.6l11.9,6.2c0,0,37.1-91.5,42.4-123.7
-               c2.7-16.4-1.1-103.9-1.1-103.9V307.5h-14.7l-0.1,232.7
-               c0,0,3.7,87.5,1.1,103.9C389,674.6,354.5,761.6,354.5,761.6z"
-          />
-          {/* Mounting block / counterweight carrier */}
-          <rect x="379.7" y="239.7" fill="#52525E" width="40.7" height="67.8" />
-          {/* Pivot bearing — outer ring */}
-          <circle fill="#D4D4E2" cx="400" cy="400" r="22.6" />
-          {/* Pivot bearing — centre screw */}
-          <circle fill="#242428" cx="400" cy="400" r="6" />
-          {/* Headshell / cartridge */}
-          <path
-            fill="#A4A4B4"
-            d="M353,738.9l18.3-22.9l13.2,6.4l-6.2,28.7
-               l-22.8,47.1c0,0-1.2,3.3-15.4-3.6
-               c-11.2-5.4-10-8.7-10-8.7L353,738.9z"
-          />
-        </svg>
+        <div className="w-2 h-full bg-gradient-to-r from-zinc-200 to-zinc-400 rounded-full shadow-lg" />
+        <div className="absolute -top-4 -left-2 w-6 h-8 bg-zinc-400 rounded-sm shadow-md border border-zinc-500" />
+        <div
+          className="absolute -bottom-3 -left-1 w-5 h-7 bg-zinc-700 rounded-t-sm rounded-b-md shadow-xl"
+          style={{ transform: 'rotate(20deg)', transformOrigin: 'top' }}
+        />
       </motion.div>
     </div>
   );

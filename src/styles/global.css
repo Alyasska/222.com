@@ -1,4 +1,10 @@
+@import "tailwindcss";
 @import './variables.css';
+
+@theme {
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Nunito', system-ui, sans-serif;
+}
 
 *,
 *::before,
