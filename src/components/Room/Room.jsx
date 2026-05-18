@@ -11,6 +11,7 @@ import SecretCode from "../SecretCode/SecretCode.jsx";
 import YouTubeHost from "../VinylPlayer/YouTubeHost.jsx";
 import { useVinylAudio } from "../../hooks/useVinylAudio.js";
 import Cosmetics from "../Decorations/Cosmetics.jsx";
+import PolaroidCamera from "../Decorations/PolaroidCamera.jsx";
 
 export default function Room() {
   const [selectedId, setSelectedId] = useState(null);
@@ -86,17 +87,18 @@ export default function Room() {
           secretUnlocked={secretUnlocked}
         />
 
-        <div className="desk">
-          <div className="desk-edge" />
-          <div className="desk-top" />
+        {/* Shelf decorations — camera left, cosmetics right */}
+        <div style={{ position: "absolute", left: "9vw", top: "21vh", width: "13vh", zIndex: 6, pointerEvents: "none" }}>
+          <PolaroidCamera />
         </div>
+        <Cosmetics />
+
+        <div className="desk" />
 
         <div className="desk-stage">
           <Books />
           <VinylPlayer activeSong={activeSong} spinning={spinning} onPrev={handlePrev} onNext={handleNext} />
           <Mug />
-          <Cosmetics />
-          <div className="sticker">222</div>
         </div>
 
         {activeSong && (
