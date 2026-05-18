@@ -35,7 +35,7 @@ export const songs = [
     id: "kontrakt",
     title: "Контракт",
     artist: "Пошлая Молли",
-    youtubeId: "FIND_THIS_ID",
+    youtubeId: "kPkft7RLX9s",
     labelImage: "/record-labels/kontrakt.png",
     color: "#B5C0D0",
   },
