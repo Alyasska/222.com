@@ -102,7 +102,7 @@ export default function VinylPlayer() {
 
           <YouTube
             videoId={songs[0].youtubeId}
-            opts={{ height: '0', width: '0', playerVars: { autoplay: 0 } }}
+            opts={{ height: '0', width: '0', playerVars: { autoplay: 0, rel: 0, iv_load_policy: 3, modestbranding: 1 } }}
             onReady={e => { playerRef.current = e.target; }}
             style={{ position: 'absolute', pointerEvents: 'none' }}
           />
