@@ -1,47 +1,900 @@
-@import "tailwindcss";
+/* ============================================================
+   222 — global styles & room atmosphere
+   100vh × 100vw, zero scroll. Warm, dim, intimate.
+   ============================================================ */
+
 @import './variables.css';
 
-@theme {
-  --font-serif: 'Cormorant Garamond', Georgia, serif;
-  --font-sans: 'Nunito', system-ui, sans-serif;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html,
-body,
-#root {
-  min-height: 100svh;
-}
-
-html {
-  font-size: 16px;
-}
-
-body {
+html, body, #root {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--wall-deep);
+  color: var(--ink);
   font-family: var(--font-sans);
-  color: var(--color-text);
-  background: #1d1518;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-@keyframes record-spin {
-  from {
-    transform: rotate(0deg);
-  }
+button { font: inherit; color: inherit; background: none; border: none; cursor: pointer; }
 
-  to {
-    transform: rotate(360deg);
-  }
+/* ============================================================
+   ROOM — the container, dim ambient lighting
+   ============================================================ */
+.room {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  isolation: isolate;
 }
 
-.record-spin {
-  animation: record-spin 2.4s linear infinite;
+/* Wall — lime-green pinboard. Cork SVG tiles over a vertical gradient. */
+.wall {
+  position: absolute;
+  inset: 0 0 50vh 0;
+  background:
+    radial-gradient(ellipse 80vw 50vh at 50% 70%, var(--wall-warm) 0%, var(--wall-mid) 50%, var(--wall-deep) 100%);
+}
+.wall::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('/222.com/cork.svg');
+  background-repeat: repeat;
+  background-size: 280px 280px;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+/* Ambient lamp glow — shifts to record color when playing */
+.ambient {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60vw 60vh at 50% 50%, var(--ambient) 0%, transparent 70%);
+  mix-blend-mode: soft-light;
+  opacity: 0.55;
+  pointer-events: none;
+  transition: background 1.8s ease;
+  z-index: 1;
+}
+
+/* Vignette to draw eye to center */
+.vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 100vw 100vh at 50% 65%, transparent 35%, rgba(0,0,0,0.4) 85%, rgba(0,0,0,0.65) 100%);
+  z-index: 30;
+}
+
+/* Cozy lamp pool — warm spotlight pooling on the desk + soft warm cast */
+.cozy {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 28;
+  background:
+    radial-gradient(ellipse 60vw 40vh at 50% 75%, rgba(255,200,140,0.28) 0%, rgba(255,170,110,0.10) 35%, transparent 70%),
+    radial-gradient(ellipse 35vw 28vh at 78% 60%, rgba(255,170,90,0.14) 0%, transparent 60%);
+  mix-blend-mode: screen;
+}
+.cozy-cast {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 29;
+  background: rgba(32,20,10,0.08);
+  mix-blend-mode: multiply;
+}
+
+/* Subtle warm dust particles up top */
+.dust {
+  position: absolute;
+  inset: 0 0 50vh 0;
+  background-image:
+    radial-gradient(1px 1px at 12% 22%, rgba(244,196,188,0.4), transparent 50%),
+    radial-gradient(1px 1px at 78% 18%, rgba(244,196,188,0.3), transparent 50%),
+    radial-gradient(1px 1px at 45% 12%, rgba(244,196,188,0.35), transparent 50%),
+    radial-gradient(1px 1px at 22% 36%, rgba(244,196,188,0.25), transparent 50%),
+    radial-gradient(1px 1px at 88% 30%, rgba(244,196,188,0.3), transparent 50%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ============================================================
+   FILM POSTERS
+   ============================================================ */
+.posters {
+  position: absolute;
+  inset: 0 0 50vh 0;
+  z-index: 4;
+  pointer-events: none;
+}
+.poster {
+  position: absolute;
+  background:
+    linear-gradient(160deg, var(--p-a, #2a3a48) 0%, var(--p-b, #0a1018) 100%);
+  border-radius: 0.3vh;
+  box-shadow:
+    inset 0 0 0 0.3vh rgba(255,240,220,0.9),
+    0.4vh 0.6vh 1.6vh rgba(0,0,0,0.6),
+    -0.2vh 0.3vh 0.6vh rgba(0,0,0,0.3);
+  overflow: hidden;
+  font-family: var(--font-sans);
+  color: rgba(255,240,220,0.95);
+}
+.poster::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, rgba(255,255,255,0.08) 0%, transparent 30%, transparent 70%, rgba(0,0,0,0.18) 100%);
+  pointer-events: none;
+}
+.poster::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: -0.4vh;
+  transform: translateX(-50%);
+  width: 1vh;
+  height: 1vh;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #f4c4bc, #8a3838 80%);
+  box-shadow:
+    inset 0 0 0 1px rgba(0,0,0,0.3),
+    0 0.2vh 0.4vh rgba(0,0,0,0.6);
+}
+.poster .p-inner {
+  position: absolute;
+  inset: 0.5vh;
+  background:
+    radial-gradient(circle at var(--accent-x, 30%) var(--accent-y, 35%),
+      var(--accent, #ff8fa3) 0%,
+      transparent 45%),
+    transparent;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0.8vh;
+}
+.poster .p-title {
+  font-family: var(--font-serif);
+  font-size: 1.2vh;
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.7);
+}
+.poster .p-sub {
+  font-size: 0.7vh;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-top: 0.3vh;
+}
+
+/* ============================================================
+   SHELF — wooden plank, upper area, holds records
+   ============================================================ */
+.shelf {
+  position: absolute;
+  left: 8vw;
+  right: 8vw;
+  top: 32vh;
+  height: 2.2vh;
+  z-index: 5;
+}
+.shelf-top {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 0.6vh;
+  background: linear-gradient(180deg, var(--wood-shelf-top) 0%, var(--wood-shelf) 100%);
+  border-radius: 1px;
+}
+.shelf-front {
+  position: absolute;
+  inset: 0.6vh 0 0 0;
+  background:
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.18) 0px, transparent 2px, transparent 60px, rgba(0,0,0,0.1) 62px),
+    linear-gradient(180deg, var(--wood-shelf) 0%, var(--wood-shelf-edge) 100%);
+  box-shadow: 0 0.4vh 1.6vh rgba(0,0,0,0.55);
+}
+.shelf-bracket {
+  position: absolute;
+  top: 100%;
+  width: 0.8vh;
+  height: 4vh;
+  background: linear-gradient(180deg, var(--wood-shelf-edge), transparent);
+  opacity: 0.6;
+}
+.shelf-bracket.left  { left:  4%; }
+.shelf-bracket.right { right: 4%; }
+
+/* ============================================================
+   RECORDS ON SHELF
+   ============================================================ */
+.shelf-items {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 1.2vw;
+  padding: 0 2vw;
+  height: 22vh;
+}
+.shelf-slot {
+  position: relative;
+  width: 13vh;
+  height: 18vh;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  cursor: pointer;
+}
+.sleeve {
+  position: relative;
+  width: 13vh;
+  height: 13vh;
+  border-radius: 0.6vh;
+  background: linear-gradient(135deg, var(--sleeve-a, #3a2a20), var(--sleeve-b, #1a1008));
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.06),
+    inset 0 -0.4vh 0.8vh rgba(0,0,0,0.4),
+    0.3vh 0.4vh 1.2vh rgba(0,0,0,0.5);
+  overflow: hidden;
+  z-index: 2;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.shelf-slot:hover .sleeve {
+  transform: translateY(-0.6vh);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.1),
+    inset 0 -0.4vh 0.8vh rgba(0,0,0,0.4),
+    0.3vh 0.8vh 2vh rgba(0,0,0,0.6),
+    0 0 2vh var(--sleeve-glow, transparent);
+}
+.sleeve-art {
+  position: absolute;
+  inset: 8%;
+  border-radius: 0.3vh;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(255,255,255,0.15), transparent 50%),
+    linear-gradient(135deg, var(--art-a, #c9826a), var(--art-b, #5a2818));
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 6%;
+  color: var(--ink);
+  font-family: var(--font-serif);
+}
+.sleeve-art .t {
+  font-size: 1.85vh;
+  line-height: 1.05;
+  font-weight: 600;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.7), 0 0 0.8vh rgba(0,0,0,0.4);
+  letter-spacing: 0.005em;
+  margin-bottom: 0.4vh;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  color: rgba(255,245,235,1);
+}
+.sleeve-art .a {
+  font-family: var(--font-sans);
+  font-size: 1.05vh;
+  font-weight: 700;
+  opacity: 0.9;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,245,235,0.95);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+.sleeve-empty .sleeve-art {
+  background:
+    radial-gradient(ellipse at center top, rgba(0,0,0,0.6) 0%, transparent 60%),
+    linear-gradient(135deg, var(--art-a, #c9826a), var(--art-b, #5a2818));
+  filter: brightness(0.65) saturate(0.7);
+}
+.sleeve-empty .sleeve-art::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  height: 22%;
+  background: radial-gradient(ellipse, rgba(0,0,0,0.7), transparent 70%);
+}
+.shelf-vinyl-wrap {
+  position: absolute;
+  bottom: 4vh;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12.5vh;
+  height: 12.5vh;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ============================================================
+   VINYL DISC (used on shelf AND turntable)
+   ============================================================ */
+.vinyl {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  position: relative;
+  background:
+    repeating-radial-gradient(circle at center, #0a0807 0px, #0a0807 1px, #1a1410 2px, #1a1410 3px),
+    radial-gradient(circle at 30% 30%, #2a1f15 0%, #0a0807 70%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.04),
+    inset 0 -1vh 3vh rgba(0,0,0,0.6),
+    0 0.8vh 2vh rgba(0,0,0,0.55);
+}
+.vinyl-spinning {
+  animation: vinyl-spin 4s linear infinite;
+}
+@keyframes vinyl-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.vinyl::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 25%, rgba(255,225,200,0.12) 0%, transparent 35%);
+  pointer-events: none;
+}
+.vinyl-label {
+  position: absolute;
+  inset: 32%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, var(--label-a, #e8a8a0), var(--label-b, #8a3a30) 80%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 4%;
+  font-family: var(--font-serif);
+  color: var(--wall-deep);
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.15), inset 0 -0.3vh 0.6vh rgba(0,0,0,0.2);
+}
+.vinyl-label-hole {
+  position: absolute;
+  width: 8%;
+  height: 8%;
+  border-radius: 50%;
+  background: var(--wall-deep);
+  box-shadow: inset 0 0 0.3vh rgba(0,0,0,0.8);
+}
+.vinyl-label .lt {
+  font-size: clamp(0.55em, 1.2vh, 1.4vh);
+  line-height: 1;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.4vh;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 90%;
+}
+.vinyl-label .la {
+  font-family: var(--font-sans);
+  font-size: clamp(0.4em, 0.85vh, 1vh);
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  opacity: 0.8;
+  margin-top: 0.3vh;
+}
+
+/* ============================================================
+   DESK — wooden surface, foreground
+   ============================================================ */
+.desk {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 50vh;
+  z-index: 10;
+}
+.desk-edge {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1.2vh;
+  background: linear-gradient(180deg, var(--wood-desk-top) 0%, var(--wood-desk) 60%, var(--wood-desk-edge) 100%);
+  box-shadow: 0 0.4vh 1.2vh rgba(0,0,0,0.7);
+}
+.desk-top {
+  position: absolute;
+  inset: 1.2vh 0 0 0;
+  background: linear-gradient(180deg, var(--wood-desk) 0%, var(--wood-desk-edge) 100%);
+}
+.desk-top::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('/222.com/wood-grain.svg');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  opacity: 0.95;
+  pointer-events: none;
+}
+.desk-top::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 50vw 30vh at 50% 0%, rgba(255,180,140,0.18) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ============================================================
+   DESK CONTENTS — top-down view
+   ============================================================ */
+.desk-stage {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 50vh;
+  z-index: 12;
+  pointer-events: none;
+}
+.desk-stage > * { pointer-events: auto; }
+
+/* TURNTABLE */
+.turntable {
+  position: absolute;
+  left: 50%;
+  top: 4vh;
+  transform: translateX(-50%);
+  width: 42vh;
+  height: 32vh;
+  background: linear-gradient(180deg, #2a1f18 0%, #1a120c 100%);
+  border-radius: 1vh;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.06),
+    inset 0 -0.4vh 0.8vh rgba(0,0,0,0.4),
+    1.2vh 1.4vh 2.4vh rgba(0,0,0,0.55),
+    -0.4vh 0.8vh 1.6vh rgba(0,0,0,0.35);
+  padding: 2vh;
+}
+
+/* SCATTER BOOKS */
+.scatter-book {
+  position: absolute;
+  border-radius: 0.5vh;
+  font-family: var(--font-serif);
+  color: rgba(255,240,220,0.85);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 1.4vh 1vh;
+  background: linear-gradient(160deg, var(--book-a, #7a4a3a), var(--book-b, #3a1f12));
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.06),
+    inset 0 0 1.6vh rgba(0,0,0,0.35),
+    1vh 1.4vh 2vh rgba(0,0,0,0.55);
+  pointer-events: none;
+}
+.scatter-book::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 1vh;
+  background: linear-gradient(90deg, rgba(0,0,0,0.45), transparent);
+  border-radius: 0.5vh 0 0 0.5vh;
+}
+.scatter-book::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0.5vh;
+  bottom: 0.5vh;
+  width: 0.5vh;
+  background: repeating-linear-gradient(180deg,
+    rgba(255,240,220,0.6) 0px,
+    rgba(255,240,220,0.6) 1px,
+    rgba(0,0,0,0.15) 2px,
+    rgba(0,0,0,0.15) 3px);
+  border-radius: 0 0.25vh 0.25vh 0;
+  opacity: 0.7;
+}
+.scatter-book .title {
+  font-size: 1.6vh;
+  line-height: 1.05;
+  font-weight: 500;
+  font-style: italic;
+  text-align: center;
+  margin-top: 0.6vh;
+  letter-spacing: 0.02em;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  max-width: 90%;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.scatter-book.open {
+  background:
+    linear-gradient(90deg, rgba(0,0,0,0.18) 49%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.18) 51%),
+    linear-gradient(160deg, #f4e0c8, #d8c0a0);
+  color: rgba(80,40,20,0.7);
+}
+.scatter-book.open::before,
+.scatter-book.open::after { display: none; }
+.scatter-book.open .title { font-style: normal; font-size: 1.1vh; opacity: 0.5; }
+
+/* TEA MUG */
+.mug {
+  position: absolute;
+  right: 6vw;
+  bottom: 6vh;
+  width: 12vh;
+  height: 12vh;
+  pointer-events: none;
+  filter: drop-shadow(1vh 1.2vh 1.4vh rgba(0,0,0,0.55));
+}
+.mug svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.mug-steam {
+  position: absolute;
+  left: 50%;
+  top: -2vh;
+  width: 6vh;
+  height: 6vh;
+  transform: translateX(-50%);
+  pointer-events: none;
+  opacity: 0.55;
+}
+.mug-steam path {
+  stroke: rgba(255,240,220,0.55);
+  stroke-width: 1;
+  fill: none;
+  stroke-linecap: round;
+  animation: steam-rise 4s ease-in-out infinite;
+  transform-origin: bottom center;
+}
+.mug-steam path:nth-child(2) { animation-delay: 0.8s; }
+.mug-steam path:nth-child(3) { animation-delay: 1.6s; }
+@keyframes steam-rise {
+  0%   { transform: translateY(0) scaleX(1); opacity: 0; }
+  30%  { opacity: 0.7; }
+  100% { transform: translateY(-3vh) scaleX(1.4); opacity: 0; }
+}
+
+/* "222" sticker on desk */
+.sticker {
+  position: absolute;
+  left: 4vw;
+  bottom: 4vh;
+  width: 8vh;
+  height: 8vh;
+  border-radius: 50%;
+  background: var(--pink-soft);
+  color: var(--wall-deep);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-serif);
+  font-size: 3vh;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  transform: rotate(-14deg);
+  box-shadow:
+    inset 0 0 0 1px rgba(0,0,0,0.1),
+    inset 0 -0.4vh 0.6vh rgba(0,0,0,0.15),
+    0.8vh 1.2vh 1.6vh rgba(0,0,0,0.55);
+  pointer-events: none;
+}
+.sticker::before {
+  content: '';
+  position: absolute;
+  inset: -3%;
+  border-radius: 50%;
+  border: 0.3vh dashed rgba(255,255,255,0.5);
+  opacity: 0.55;
+}
+.sticker::after {
+  content: '.com';
+  position: absolute;
+  bottom: 1.6vh;
+  font-size: 0.9vh;
+  font-family: var(--font-sans);
+  letter-spacing: 0.2em;
+  opacity: 0.65;
+  font-weight: 800;
+}
+
+/* ============================================================
+   TURNTABLE INTERNALS
+   ============================================================ */
+.platter {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-58%, -52%);
+  width: 26vh;
+  height: 26vh;
+  border-radius: 50%;
+  background:
+    repeating-radial-gradient(circle at center, #1a1410 0px, #1a1410 1px, #0a0707 2px, #0a0707 3px),
+    radial-gradient(circle at center, #2a1f18, #0a0707 80%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,0.04),
+    inset 0 0 2vh rgba(0,0,0,0.6),
+    0 0 1vh rgba(0,0,0,0.5);
+}
+.platter::before {
+  content: '';
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  width: 0.8vh;
+  height: 0.8vh;
+  border-radius: 50%;
+  background: #c9b8a4;
+  box-shadow: 0 0 0.3vh rgba(255,220,180,0.6);
+  z-index: 5;
+}
+.turntable-vinyl-wrap {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-58%, -52%);
+  width: 26vh;
+  height: 26vh;
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* Tonearm */
+.tonearm-pivot {
+  position: absolute;
+  right: 3vh;
+  top: 3vh;
+  width: 18vh;
+  height: 18vh;
+  z-index: 6;
+  pointer-events: none;
+  transform-origin: 85% 15%;
+  transform: rotate(28deg);
+  transition: transform 1.1s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.tonearm-pivot.tonearm-playing {
+  transform: rotate(-2deg);
+}
+.tonearm-base {
+  position: absolute;
+  right: 0; top: 0;
+  width: 4vh;
+  height: 4vh;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #c9b8a4, #5a4530 80%);
+  box-shadow:
+    inset 0 0 0 1px rgba(0,0,0,0.3),
+    inset 0 -0.3vh 0.4vh rgba(0,0,0,0.4),
+    0.2vh 0.3vh 0.6vh rgba(0,0,0,0.5);
+  z-index: 2;
+}
+.tonearm-arm {
+  position: absolute;
+  right: 1.7vh;
+  top: 1.7vh;
+  width: 16vh;
+  height: 0.5vh;
+  background: linear-gradient(180deg, #d0c0ac 0%, #8a7560 100%);
+  border-radius: 0.25vh;
+  transform-origin: 100% 50%;
+  box-shadow:
+    inset 0 -0.15vh 0.2vh rgba(0,0,0,0.3),
+    0.1vh 0.2vh 0.4vh rgba(0,0,0,0.5);
+}
+.tonearm-arm::before {
+  content: '';
+  position: absolute;
+  right: -1vh;
+  top: -0.5vh;
+  width: 2vh;
+  height: 1.5vh;
+  background: radial-gradient(circle at 30% 30%, #5a4530, #1a1208);
+  border-radius: 0.3vh;
+}
+.tonearm-arm::after {
+  content: '';
+  position: absolute;
+  left: -0.5vh;
+  top: -0.5vh;
+  width: 2vh;
+  height: 1.5vh;
+  background: linear-gradient(180deg, #4a3520, #1a1208);
+  border-radius: 0.3vh;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.08);
+}
+
+/* Controls strip */
+.turntable-controls {
+  position: absolute;
+  left: 2vh;
+  bottom: 2vh;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8vh;
+  z-index: 5;
+}
+.knob {
+  width: 2.4vh;
+  height: 2.4vh;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #5a4a3a, #1a1208 80%);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06), 0.1vh 0.2vh 0.3vh rgba(0,0,0,0.5);
+  position: relative;
+}
+.knob::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 15%;
+  width: 1px;
+  height: 35%;
+  background: var(--pink-soft);
+  transform: translateX(-50%);
+  border-radius: 0.5px;
+  box-shadow: 0 0 0.2vh var(--pink-soft);
+}
+.led {
+  width: 0.6vh;
+  height: 0.6vh;
+  border-radius: 50%;
+  background: var(--led, #3a2018);
+  box-shadow: 0 0 0.4vh var(--led, #3a2018);
+  margin-left: 0.9vh;
+  transition: background 0.6s ease;
+}
+.led.on { --led: var(--rose); }
+
+/* ============================================================
+   NOW PLAYING — bottom-right card
+   ============================================================ */
+.now-playing {
+  position: absolute;
+  right: 5vw;
+  top: 38vh;
+  z-index: 20;
+  max-width: 30vw;
+  font-family: var(--font-serif);
+  text-align: right;
+  pointer-events: none;
+}
+.now-playing .title {
+  font-size: 3.1vh;
+  line-height: 1.05;
+  color: var(--ink);
+  margin-bottom: 0.5vh;
+  font-weight: 600;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.7);
+}
+.now-playing .artist {
+  font-family: var(--font-sans);
+  font-size: 1.3vh;
+  letter-spacing: 0.18em;
+  color: var(--ink-mute);
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+/* ============================================================
+   HEADER — "222" top-left
+   ============================================================ */
+.room-title {
+  position: absolute;
+  top: 4vh;
+  left: 5vw;
+  z-index: 20;
+  font-family: var(--font-serif);
+  pointer-events: none;
+}
+.room-title .num {
+  font-size: 5vh;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--pink-soft);
+  font-weight: 600;
+  text-shadow: 0 0 2vh rgba(255,180,162,0.4), 0 2px 6px rgba(0,0,0,0.6);
+}
+
+/* ============================================================
+   SECRET TOAST & PETALS
+   ============================================================ */
+.secret-toast {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 100;
+}
+.secret-toast-inner {
+  font-family: var(--font-serif);
+  font-size: 6vh;
+  color: var(--pink-soft);
+  text-shadow: 0 0 4vh var(--rose), 0 0 8vh var(--rose);
+  letter-spacing: -0.02em;
+}
+.petal {
+  position: fixed;
+  top: -3vh;
+  width: 1.4vh;
+  height: 1.8vh;
+  border-radius: 60% 40% 60% 40% / 70% 70% 30% 30%;
+  z-index: 99;
+  pointer-events: none;
+}
+
+/* hidden YouTube iframe */
+.yt-host {
+  position: fixed;
+  width: 1px;
+  height: 1px;
+  left: -100px;
+  top: -100px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ============================================================
+   FAIRY LIGHTS
+   ============================================================ */
+.fairy {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 3vh;
+  height: 10vh;
+  z-index: 6;
+  pointer-events: none;
+}
+.fairy-wire {
+  position: absolute;
+  left: 0; right: 0; top: 0;
+  height: 100%;
+  width: 100%;
+}
+.fairy-wire path {
+  fill: none;
+  stroke: rgba(255,255,255,0.07);
+  stroke-width: 0.4;
+  stroke-linecap: round;
+}
+.fairy-light {
+  position: absolute;
+  width: 0.9vh;
+  height: 0.9vh;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background:
+    radial-gradient(circle at 40% 35%, rgba(255,255,255,0.9) 0%, var(--bulb, #fff2dc) 55%, color-mix(in oklab, var(--bulb) 70%, black) 100%);
+  box-shadow:
+    0 0 0.4vh var(--bulb, #fff2dc),
+    0 0 1.6vh color-mix(in oklab, var(--bulb) 70%, transparent),
+    0 0 3.6vh color-mix(in oklab, var(--bulb) 40%, transparent);
+  animation: bulb-flicker 6s ease-in-out infinite;
+}
+@keyframes bulb-flicker {
+  0%, 100% { filter: brightness(1); }
+  48%      { filter: brightness(1.08); }
+  72%      { filter: brightness(0.92); }
 }
