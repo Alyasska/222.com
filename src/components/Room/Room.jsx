@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import VinylPlayer from '../VinylPlayer/VinylPlayer';
 import Tulips from '../Decorations/Tulips';
@@ -10,168 +10,135 @@ import Polaroid from '../Decorations/Polaroid';
 import Playlist from '../Playlist/Playlist';
 import { songs } from '../../data/songs';
 
-const sleep = ms => new Promise(r => setTimeout(r, ms));
-
 export default function Room() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [playing, setPlaying] = useState(false);
-  const [showTitle, setShowTitle] = useState(false);
-  const switchingRef = useRef(false);
 
   const currentSong = songs[currentIndex];
 
-  async function handleSongSelect(index) {
-    if (switchingRef.current) return;
+  function handleSongSelect(index) {
     if (index === currentIndex) {
-      if (!playing) setShowTitle(true);
-      setPlaying(p => !p);
+      setPlaying((prev) => !prev);
       return;
     }
-    switchingRef.current = true;
-    setShowTitle(false);
-    if (playing) {
-      setPlaying(false);
-      await sleep(800);
-    }
+
     setCurrentIndex(index);
-    await sleep(400);
     setPlaying(true);
-    setShowTitle(true);
-    switchingRef.current = false;
   }
 
   function handleTogglePlay() {
-    if (switchingRef.current) return;
-    if (!playing) setShowTitle(true);
-    setPlaying(p => !p);
+    setPlaying((prev) => !prev);
   }
 
   function handleNext() {
-    handleSongSelect((currentIndex + 1) % songs.length);
+    const nextIndex = (currentIndex + 1) % songs.length;
+    setCurrentIndex(nextIndex);
+    setPlaying(true);
   }
 
   return (
-    <div
-      className="min-h-screen relative overflow-hidden font-sans text-stone-800 selection:bg-pink-200"
-      style={{
-        backgroundColor: '#fcf5f8',
-        backgroundImage: [
-          'repeating-linear-gradient(transparent, transparent 60px, rgba(244,114,182,0.04) 60px, rgba(244,114,182,0.04) 120px)',
-          'radial-gradient(circle at 50% 30%, transparent 0%, rgba(0,0,0,0.05) 100%)',
-        ].join(', '),
-      }}
-    >
-      {/* ── Background scene ── */}
-      <div className="absolute inset-0 flex flex-col z-0">
+    <div className="relative min-h-screen overflow-x-clip font-sans text-stone-100 selection:bg-pink-300/40">
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            'radial-gradient(120% 90% at 50% 0%, #fceef2 0%, #edcfda 45%, #c09dab 100%)',
+        }}
+      />
 
-        {/* Wall */}
-        <div className="flex-grow relative">
-          <div
-            className="absolute top-0 -left-[10%] w-[60%] h-full pointer-events-none -skew-x-12 opacity-80"
-            style={{
-              background: 'linear-gradient(105deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 40%, rgba(255,255,255,0) 80%)',
-              mixBlendMode: 'overlay',
-              clipPath: 'polygon(10% 0, 80% 0, 100% 100%, 30% 100%)',
-            }}
-          />
-          <div
-            className="absolute top-0 left-[5%] w-[10%] h-full pointer-events-none -skew-x-12 opacity-50"
-            style={{
-              background: 'linear-gradient(105deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 40%, rgba(255,255,255,0) 80%)',
-              mixBlendMode: 'overlay',
-              clipPath: 'polygon(10% 0, 80% 0, 100% 100%, 30% 100%)',
-            }}
-          />
+      <div className="absolute inset-0 bg-black/28 pointer-events-none" />
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          background:
+            'radial-gradient(circle at 18% 8%, rgba(255,255,255,0.34), transparent 35%), radial-gradient(circle at 85% 20%, rgba(255, 220, 198, 0.18), transparent 32%)',
+        }}
+      />
+
+      <div className="absolute inset-0 z-0 flex flex-col">
+        <div className="relative flex-grow">
           <FairyLights />
           <Polaroid />
         </div>
 
-        {/* Baseboard + Desk */}
-        <div className="h-[40vh] w-full relative flex flex-col flex-shrink-0">
-          <div className="absolute -top-8 left-0 right-0 h-8 bg-[#f8f6f3] border-t-2 border-[#e8e5e0] z-0">
-            <div className="h-[2px] w-full bg-white/80" />
-            <div className="h-1 w-full bg-black/5" />
-          </div>
+        <div className="relative h-[39svh] w-full flex-shrink-0">
+          <div className="absolute -top-10 left-0 right-0 h-10 bg-[#f5ebe6]/95 border-y border-black/10" />
 
           <div
-            className="flex-grow relative z-10 border-t border-white/30"
+            className="relative h-full border-t border-white/20"
             style={{
               backgroundImage: [
-                'linear-gradient(180deg, #c49a6c 0%, #d4a373 15%, #c8975f 100%)',
-                'repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(0,0,0,0.025) 60px, rgba(0,0,0,0.025) 61px)',
+                'linear-gradient(180deg, #9f6b44 0%, #845737 45%, #71482d 100%)',
+                'repeating-linear-gradient(90deg, transparent, transparent 64px, rgba(0,0,0,0.08) 64px, rgba(0,0,0,0.08) 65px)',
               ].join(', '),
-              boxShadow: 'inset 0 20px 40px rgba(0,0,0,0.1), 0 -15px 35px rgba(0,0,0,0.15)',
+              boxShadow: 'inset 0 25px 50px rgba(0,0,0,0.3), 0 -15px 30px rgba(0,0,0,0.25)',
             }}
           >
-            <div className="absolute top-0 left-0 w-full h-10 bg-gradient-to-b from-black/15 to-transparent pointer-events-none" />
+            <div className="absolute left-7 right-7 top-2 h-1.5 rounded-full bg-gradient-to-r from-cyan-300/85 via-pink-300/90 to-cyan-300/85" style={{ boxShadow: '0 0 16px rgba(103, 232, 249, 0.75), 0 0 22px rgba(244, 114, 182, 0.55)' }} />
+            <div className="absolute left-7 right-7 top-4 h-4 rounded-full bg-cyan-200/18 blur-md" />
           </div>
 
           <div
-            className="h-7 z-20 border-t border-black/20 shadow-2xl"
-            style={{ background: 'linear-gradient(180deg, #9e6b3a 0%, #b07840 100%)' }}
-          >
-            <div className="h-[1px] w-full bg-white/20" />
-          </div>
+            className="absolute -bottom-7 left-0 right-0 h-7 border-t border-black/30"
+            style={{ background: 'linear-gradient(180deg, #72492f 0%, #623e27 100%)' }}
+          />
         </div>
       </div>
 
-      {/* ── Foreground content ── */}
-      <div className="absolute inset-0 z-20 container mx-auto px-4 lg:px-12 flex flex-col lg:flex-row items-center justify-center lg:items-end lg:pb-[18vh] gap-8 lg:gap-16 pt-12 lg:pt-0 h-full">
-
-        {/* Left: Tulips + Books */}
+      <div className="relative z-20 mx-auto flex min-h-screen w-full max-w-[1600px] flex-col items-center justify-end gap-8 px-4 pb-[11svh] pt-20 lg:grid lg:grid-cols-[1fr_minmax(520px,700px)_1fr] lg:items-end lg:gap-12 lg:px-8 xl:px-16">
         <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1, delay: 0.5, ease: 'easeOut' }}
-          className="flex flex-col items-center gap-2 absolute left-2 lg:left-10 bottom-[38vh] lg:bottom-[35vh] scale-75 lg:scale-100 origin-bottom-left z-20"
+          initial={{ opacity: 0, x: -32, y: 24 }}
+          animate={{ opacity: 1, x: 0, y: 0 }}
+          transition={{ duration: 0.9, delay: 0.25, ease: 'easeOut' }}
+          className="order-2 flex w-full max-w-[320px] scale-110 items-end justify-center lg:order-1 lg:scale-[1.18] lg:justify-start lg:pb-9"
         >
-          <Tulips />
-          <Books />
+          <div className="flex items-end gap-3">
+            <Tulips />
+            <Books />
+          </div>
         </motion.div>
 
-        {/* Center: Player */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9, y: 30 }}
+          initial={{ opacity: 0, scale: 0.94, y: 26 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          className="relative z-30"
+          className="order-1 flex w-full flex-col items-center gap-4 lg:order-2"
         >
-          <div className="absolute -top-20 left-0 w-full text-center">
+          <div className="w-full max-w-[640px] rounded-2xl border border-white/25 bg-black/22 px-5 py-4 text-center shadow-2xl backdrop-blur-sm">
             <AnimatePresence mode="wait">
-              {showTitle && (
-                <motion.h1
-                  key={currentSong.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -6 }}
-                  transition={{ duration: 0.5 }}
-                  className="text-2xl lg:text-4xl font-semibold text-stone-800 tracking-wide drop-shadow-md"
-                  style={{ fontFamily: 'var(--font-serif)' }}
-                >
-                  {currentSong.title}
-                </motion.h1>
-              )}
+              <motion.h1
+                key={currentSong.id}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                transition={{ duration: 0.35 }}
+                className="text-3xl font-semibold tracking-wide text-rose-50 lg:text-5xl"
+                style={{ fontFamily: 'var(--font-serif)' }}
+              >
+                {currentSong.title}
+              </motion.h1>
             </AnimatePresence>
-            <p className="text-stone-500 text-sm mt-1 italic" style={{ fontFamily: 'var(--font-serif)' }}>
-              {playing ? 'Now Playing...' : 'Click to play'}
+            <p className="mt-2 text-base italic text-rose-100/85 lg:text-lg" style={{ fontFamily: 'var(--font-serif)' }}>
+              {playing ? `Now Playing • ${currentSong.artist}` : `Tap to play • ${currentSong.artist}`}
             </p>
           </div>
 
-          <VinylPlayer
-            playing={playing}
-            currentSong={currentSong}
-            onTogglePlay={handleTogglePlay}
-            onNext={handleNext}
-          />
-          <Sticker222 />
+          <div className="relative">
+            <VinylPlayer
+              playing={playing}
+              currentSong={currentSong}
+              onTogglePlay={handleTogglePlay}
+              onNext={handleNext}
+            />
+            <Sticker222 />
+          </div>
         </motion.div>
 
-        {/* Right: Playlist */}
         <motion.div
-          initial={{ opacity: 0, y: 50, rotate: -5 }}
-          animate={{ opacity: 1, y: 0, rotate: 2 }}
-          transition={{ duration: 1, delay: 0.8, ease: 'easeOut' }}
-          className="w-full max-w-xs z-30 relative"
+          initial={{ opacity: 0, x: 28, y: 26, rotate: -1 }}
+          animate={{ opacity: 1, x: 0, y: 0, rotate: 1.5 }}
+          transition={{ duration: 0.95, delay: 0.45, ease: 'easeOut' }}
+          className="order-3 w-full max-w-[420px]"
         >
           <Playlist
             songs={songs}

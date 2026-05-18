@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import YouTube from 'react-youtube';
 import Record from './Record';
 import Tonearm from './Tonearm';
@@ -6,100 +6,139 @@ import Tonearm from './Tonearm';
 export default function VinylPlayer({ playing, currentSong, onTogglePlay, onNext }) {
   const playerRef = useRef(null);
   const loadedIdRef = useRef(null);
+  const [isReady, setIsReady] = useState(false);
 
   useEffect(() => {
     const player = playerRef.current;
-    if (!player) return;
-    if (playing) {
+    if (!player || !isReady) return;
+
+    try {
       if (loadedIdRef.current !== currentSong.youtubeId) {
         loadedIdRef.current = currentSong.youtubeId;
-        player.loadVideoById(currentSong.youtubeId);
-      } else {
-        player.playVideo();
+        if (playing) {
+          player.loadVideoById(currentSong.youtubeId);
+        } else {
+          player.cueVideoById(currentSong.youtubeId);
+        }
       }
-    } else {
-      player.pauseVideo();
+
+      if (playing) {
+        player.unMute();
+        player.playVideo();
+      } else {
+        player.pauseVideo();
+      }
+    } catch {
+      // Browsers may block autoplay after non-gesture transitions.
     }
-  }, [playing, currentSong]);
+  }, [playing, currentSong.youtubeId, isReady]);
+
+  function handleReady(event) {
+    playerRef.current = event.target;
+    loadedIdRef.current = currentSong.youtubeId;
+    setIsReady(true);
+
+    event.target.cueVideoById(currentSong.youtubeId);
+
+    if (playing) {
+      event.target.playVideo();
+    }
+  }
+
+  function handlePlayerError() {
+    // Some tracks are restricted in embedded players.
+    // We keep the UI responsive and allow the user to try another record.
+  }
 
   return (
-    <div
-      className="relative group cursor-pointer w-[300px] h-[300px] lg:w-[400px] lg:h-[400px] rounded-3xl border border-white/40 flex items-center justify-center transition-transform hover:scale-[1.01]"
-      style={{
-        background: '#e6d5c3',
-        boxShadow: '0 20px 50px rgba(0,0,0,0.3), inset 0 2px 4px rgba(255,255,255,0.8)',
-      }}
-      onClick={onTogglePlay}
-    >
-      {/* Texture */}
+    <div className="relative">
       <div
-        className="absolute inset-0 rounded-3xl opacity-[0.06] pointer-events-none"
+        className="group relative flex h-[320px] w-[320px] cursor-pointer items-center justify-center overflow-hidden rounded-[34px] border border-white/20 bg-[#2f1d12] transition-transform duration-200 hover:scale-[1.01] sm:h-[420px] sm:w-[420px] lg:h-[520px] lg:w-[520px]"
         style={{
-          backgroundImage: 'repeating-linear-gradient(45deg, #000 0px, #000 1px, transparent 1px, transparent 8px)',
+          boxShadow:
+            '0 35px 70px rgba(0,0,0,0.45), inset 0 2px 6px rgba(255,255,255,0.12), inset 0 -3px 8px rgba(0,0,0,0.4)',
         }}
-      />
-
-      <Record playing={playing} currentSong={currentSong} />
-      <Tonearm playing={playing} />
-
-      {/* Knobs (bottom-left) */}
-      <div className="absolute bottom-5 left-5 flex gap-3 z-10" onClick={e => e.stopPropagation()}>
-        <div className="w-8 h-8 rounded-full bg-stone-200 border-2 border-stone-300 shadow-md flex items-center justify-center">
-          <div className={`w-1.5 h-1.5 rounded-full transition-colors ${playing ? 'bg-green-400' : 'bg-red-400'}`} />
-        </div>
-        <div className="w-6 h-6 self-center rounded-full bg-stone-300 border-b-2 border-stone-400 shadow-sm" />
-        <div className="w-6 h-6 self-center rounded-full bg-stone-300 border-b-2 border-stone-400 shadow-sm" />
-      </div>
-
-      {/* Brand */}
-      <div
-        className="absolute bottom-6 right-14 z-10 text-xs tracking-widest text-stone-500/50 select-none"
-        style={{ fontFamily: 'var(--font-serif)' }}
+        onClick={onTogglePlay}
       >
-        222
-      </div>
+        <div
+          className="absolute inset-0 opacity-25"
+          style={{
+            backgroundImage:
+              'radial-gradient(circle at 20% 15%, rgba(255,255,255,0.16), transparent 30%), repeating-linear-gradient(65deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 1px, transparent 1px, transparent 9px)',
+          }}
+        />
 
-      {/* Next vinyl */}
-      <button
-        className="absolute bottom-4 right-4 z-10 text-stone-400 hover:text-stone-600 transition-colors p-1.5 rounded-full hover:bg-stone-200/60"
-        onClick={e => { e.stopPropagation(); onNext(); }}
-        aria-label="Next record"
-        title="Next record"
-      >
-        <VinylIcon />
-      </button>
+        <Record playing={playing} currentSong={currentSong} />
+        <Tonearm playing={playing} />
 
-      {/* Play/pause hover hint */}
-      <div className="absolute inset-0 rounded-3xl flex items-center justify-center pointer-events-none">
-        <div className="w-14 h-14 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-white/75 backdrop-blur-sm shadow-lg flex items-center justify-center text-pink-500">
-          {playing ? <PauseIcon /> : <PlayIcon />}
+        <div className="absolute bottom-6 left-6 z-20 flex items-center gap-3" onClick={(event) => event.stopPropagation()}>
+          <div className="flex h-10 w-10 items-center justify-center rounded-full border border-zinc-400 bg-zinc-200 shadow-lg sm:h-11 sm:w-11">
+            <div className={`h-2.5 w-2.5 rounded-full transition-colors ${playing ? 'bg-emerald-400' : 'bg-rose-400'}`} />
+          </div>
+          <div className="h-7 w-7 rounded-full border-b-2 border-zinc-500 bg-zinc-300 shadow-md sm:h-8 sm:w-8" />
+          <div className="h-7 w-7 rounded-full border-b-2 border-zinc-500 bg-zinc-300 shadow-md sm:h-8 sm:w-8" />
         </div>
-      </div>
 
-      <YouTube
-        videoId={currentSong.youtubeId}
-        opts={{ height: '0', width: '0', playerVars: { autoplay: 0, rel: 0, iv_load_policy: 3, modestbranding: 1 } }}
-        onReady={e => { playerRef.current = e.target; }}
-        style={{ position: 'absolute', pointerEvents: 'none' }}
-      />
+        <div className="absolute bottom-7 right-[5.2rem] z-20 select-none text-sm tracking-[0.35em] text-amber-100/60 sm:text-base" style={{ fontFamily: 'var(--font-serif)' }}>
+          222
+        </div>
+
+        <button
+          className="absolute bottom-5 right-5 z-20 rounded-full bg-white/8 p-2 text-amber-100/70 transition-colors hover:bg-white/20 hover:text-amber-50"
+          onClick={(event) => {
+            event.stopPropagation();
+            onNext();
+          }}
+          aria-label="Next record"
+          title="Next record"
+        >
+          <VinylIcon />
+        </button>
+
+        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white/70 text-rose-500 opacity-0 shadow-xl backdrop-blur-sm transition-opacity duration-200 group-hover:opacity-100">
+            {playing ? <PauseIcon /> : <PlayIcon />}
+          </div>
+        </div>
+
+        <YouTube
+          videoId={currentSong.youtubeId}
+          opts={{
+            height: '0',
+            width: '0',
+            playerVars: {
+              autoplay: 0,
+              controls: 0,
+              rel: 0,
+              modestbranding: 1,
+              playsinline: 1,
+              iv_load_policy: 3,
+            },
+          }}
+          onReady={handleReady}
+          onEnd={onNext}
+          onError={handlePlayerError}
+          style={{ position: 'absolute', pointerEvents: 'none' }}
+        />
+      </div>
     </div>
   );
 }
 
 function VinylIcon() {
   return (
-    <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
+    <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
       <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.5" />
-      <circle cx="12" cy="12" r="6" stroke="currentColor" strokeWidth="1" strokeOpacity="0.5" />
-      <circle cx="12" cy="12" r="2" fill="currentColor" opacity="0.6" />
-      <path d="M19 5 L21 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <circle cx="12" cy="12" r="6" stroke="currentColor" strokeWidth="1" strokeOpacity="0.6" />
+      <circle cx="12" cy="12" r="2" fill="currentColor" opacity="0.7" />
+      <path d="M18.6 5.4 L21 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
   );
 }
 
 function PlayIcon() {
   return (
-    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
       <path d="M8 5v14l11-7z" />
     </svg>
   );
@@ -107,8 +146,8 @@ function PlayIcon() {
 
 function PauseIcon() {
   return (
-    <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
-      <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+    <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+      <path d="M6 19h4V5H6zm8-14v14h4V5z" />
     </svg>
   );
 }

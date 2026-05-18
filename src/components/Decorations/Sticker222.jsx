@@ -3,33 +3,34 @@ import { motion } from 'framer-motion';
 export default function Sticker222() {
   return (
     <motion.div
-      initial={{ opacity: 0, rotate: -20, scale: 0.5 }}
-      animate={{ opacity: 1, rotate: 8, scale: 1 }}
-      transition={{ delay: 1.5, type: 'spring', stiffness: 200, damping: 18 }}
-      className="absolute -bottom-6 -right-4 lg:-right-8 z-40"
+      initial={{ opacity: 0, rotate: -14, scale: 0.55 }}
+      animate={{ opacity: 1, rotate: 7, scale: 1 }}
+      transition={{ delay: 1.1, type: 'spring', stiffness: 200, damping: 18 }}
+      className="absolute -bottom-5 right-3 z-40 lg:-bottom-7 lg:-right-6"
     >
       <div
-        className="relative px-4 py-2 rounded-sm flex items-center justify-center hover:rotate-12 transition-transform cursor-pointer"
+        className="relative flex cursor-pointer items-center justify-center rounded-sm px-4 py-2 transition-transform hover:rotate-[11deg]"
         style={{
-          background: '#fdfbf7',
-          filter: 'drop-shadow(2px 4px 6px rgba(0,0,0,0.15))',
+          background: '#fffdf9',
+          filter: 'drop-shadow(2px 5px 7px rgba(0,0,0,0.24))',
           border: '1px solid rgba(0,0,0,0.08)',
         }}
       >
         <span
-          className="font-bold text-xl tracking-widest border-2 border-red-600/30 px-2 py-0.5 rounded-sm"
+          className="rounded-sm border-2 border-red-600/35 px-2 py-0.5 text-xl font-bold tracking-widest"
           style={{
             fontFamily: 'var(--font-serif)',
             color: '#dc2626',
-            opacity: 0.8,
+            opacity: 0.85,
             mixBlendMode: 'multiply',
           }}
         >
           222
         </span>
+
         <div
-          className="absolute top-0 right-0 w-3 h-3 pointer-events-none"
-          style={{ background: 'linear-gradient(to bottom left, rgba(0,0,0,0.08), transparent)' }}
+          className="pointer-events-none absolute right-0 top-0 h-3 w-3"
+          style={{ background: 'linear-gradient(to bottom left, rgba(0,0,0,0.1), transparent)' }}
         />
       </div>
     </motion.div>

@@ -1,30 +1,28 @@
 import { motion } from 'framer-motion';
 
-const REST_DEG = 15;
-const PLAY_DEG = 35;
+const REST_DEG = 16;
+const PLAY_DEG = 36;
 
 export default function Tonearm({ playing }) {
   return (
-    <div className="absolute top-5 right-7 lg:top-6 lg:right-8 w-16 h-44 lg:h-56 z-20 pointer-events-none">
-      {/* Pivot base */}
-      <div className="absolute top-0 right-0 w-12 h-12 lg:w-14 lg:h-14 bg-zinc-300 rounded-full shadow-xl border border-zinc-400 flex items-center justify-center z-10">
-        <div className="w-7 h-7 lg:w-8 lg:h-8 rounded-full bg-zinc-200 border-2 border-zinc-400 flex items-center justify-center">
-          <div className="w-2 h-2 rounded-full bg-zinc-800" />
+    <div className="pointer-events-none absolute right-7 top-4 z-20 h-[205px] w-[72px] sm:right-9 sm:top-6 sm:h-[255px] sm:w-[86px] lg:right-12 lg:top-10 lg:h-[330px] lg:w-[108px]">
+      <div className="absolute right-0 top-0 z-10 flex h-12 w-12 items-center justify-center rounded-full border border-zinc-400 bg-zinc-300 shadow-xl sm:h-16 sm:w-16 lg:h-20 lg:w-20">
+        <div className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-zinc-500 bg-zinc-200 sm:h-9 sm:w-9 lg:h-11 lg:w-11">
+          <div className="h-2.5 w-2.5 rounded-full bg-zinc-800" />
         </div>
       </div>
 
-      {/* Arm */}
       <motion.div
-        className="absolute top-6 right-6 lg:top-7 lg:right-7 w-2 h-36 lg:h-44 origin-top"
+        className="absolute right-5 top-7 h-[148px] w-[9px] origin-top sm:right-7 sm:top-8 sm:h-[192px] sm:w-[10px] lg:right-8 lg:top-10 lg:h-[244px]"
         initial={{ rotate: REST_DEG }}
         animate={{ rotate: playing ? PLAY_DEG : REST_DEG }}
-        transition={{ type: 'spring', stiffness: 180, damping: 42 }}
+        transition={{ type: 'spring', stiffness: 170, damping: 34, mass: 0.9 }}
       >
-        <div className="w-2 h-full bg-gradient-to-r from-zinc-200 to-zinc-400 rounded-full shadow-lg" />
-        <div className="absolute -top-4 -left-2 w-6 h-8 bg-zinc-400 rounded-sm shadow-md border border-zinc-500" />
+        <div className="h-full w-full rounded-full bg-gradient-to-r from-zinc-200 to-zinc-500 shadow-lg" />
+        <div className="absolute -left-2 -top-4 h-8 w-5 rounded-sm border border-zinc-500 bg-zinc-400 shadow-md sm:h-10 sm:w-6 lg:h-11 lg:w-7" />
         <div
-          className="absolute -bottom-3 -left-1 w-5 h-7 bg-zinc-700 rounded-t-sm rounded-b-md shadow-xl"
-          style={{ transform: 'rotate(20deg)', transformOrigin: 'top' }}
+          className="absolute -bottom-3 -left-1 h-7 w-5 rounded-b-md rounded-t-sm bg-zinc-700 shadow-xl sm:h-8 sm:w-6 lg:h-10 lg:w-7"
+          style={{ transform: 'rotate(19deg)', transformOrigin: 'top' }}
         />
       </motion.div>
     </div>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function SecretCode() {
@@ -6,50 +6,53 @@ export default function SecretCode() {
 
   useEffect(() => {
     let buf = '';
-    const onKey = e => {
-      buf = (buf + e.key).slice(-3);
+    const onKey = (event) => {
+      buf = (buf + event.key).slice(-3);
       if (buf === '213') {
         setActive(true);
         setTimeout(() => setActive(false), 5000);
       }
     };
+
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
-  return (
-    <AnimatePresence>
-      {active && <TulipConfetti />}
-    </AnimatePresence>
-  );
+  return <AnimatePresence>{active && <TulipConfetti />}</AnimatePresence>;
 }
 
-function TulipConfetti() {
-  const petals = Array.from({ length: 40 }, (_, i) => ({
-    key: i,
+function createPetals() {
+  const palette = ['#f9a8d4', '#fecdd3', '#f472b6', '#ffffff', '#fbcfe8'];
+
+  return Array.from({ length: 40 }, (_, index) => ({
+    key: index,
     startX: Math.random() * 100,
     endX: Math.random() * 20 - 10,
     duration: 2 + Math.random() * 3,
     delay: Math.random() * 1.2,
     size: 10 + Math.random() * 15,
-    color: ['#f9a8d4', '#fecdd3', '#f472b6', '#ffffff', '#fbcfe8'][Math.floor(Math.random() * 5)],
+    color: palette[Math.floor(Math.random() * palette.length)],
     dir: Math.random() > 0.5 ? 1 : -1,
   }));
+}
+
+function TulipConfetti() {
+  const petals = useMemo(() => createPetals(), []);
 
   return (
     <div className="fixed inset-0 z-50 pointer-events-none overflow-hidden">
-      {petals.map(p => (
+      {petals.map((petal) => (
         <motion.div
-          key={p.key}
-          initial={{ top: '-10%', left: `${p.startX}%`, rotate: 0, opacity: 1 }}
+          key={petal.key}
+          initial={{ top: '-10%', left: `${petal.startX}%`, rotate: 0, opacity: 1 }}
           animate={{
             top: '110%',
-            left: `${p.startX + p.endX}%`,
-            rotate: 360 * p.dir,
+            left: `${petal.startX + petal.endX}%`,
+            rotate: 360 * petal.dir,
           }}
-          transition={{ duration: p.duration, delay: p.delay, ease: 'linear' }}
+          transition={{ duration: petal.duration, delay: petal.delay, ease: 'linear' }}
           className="absolute rounded-tl-full rounded-br-full shadow-sm"
-          style={{ width: p.size, height: p.size, backgroundColor: p.color }}
+          style={{ width: petal.size, height: petal.size, backgroundColor: petal.color }}
         />
       ))}
 
@@ -57,10 +60,10 @@ function TulipConfetti() {
         initial={{ opacity: 0, y: 50, x: '-50%' }}
         animate={{ opacity: 1, y: 0, x: '-50%' }}
         exit={{ opacity: 0, y: -20, x: '-50%' }}
-        className="absolute top-20 left-1/2 bg-white/80 backdrop-blur-md text-pink-600 italic px-6 py-3 rounded-full shadow-lg border border-pink-200 text-xl whitespace-nowrap"
+        className="absolute left-1/2 top-20 whitespace-nowrap rounded-full border border-pink-200 bg-white/80 px-6 py-3 text-xl italic text-pink-600 shadow-lg backdrop-blur-md"
         style={{ fontFamily: 'var(--font-serif)' }}
       >
-        "I love you." — Room 222
+        "I love you." - Room 222
       </motion.div>
     </div>
   );

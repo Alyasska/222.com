@@ -2,28 +2,28 @@ import styles from './Books.module.css';
 
 const books = [
   {
-    title: 'The Unbearable Lightness of Being',
-    author: 'Kundera',
+    title: 'Unbearable Lightness',
     spine: '#8B6F8E',
     spineEdge: '#6B4F6E',
-    text: '#F0E8F0',
-    width: 28,
+    text: '#F7EFF7',
+    width: 44,
+    tilt: -3,
   },
   {
     title: 'To the Lighthouse',
-    author: 'Woolf',
     spine: '#4A6F8A',
     spineEdge: '#2A4F6A',
-    text: '#E8F0F8',
-    width: 22,
+    text: '#EAF4FF',
+    width: 40,
+    tilt: 1,
   },
   {
-    title: 'Poems by Mukagali Makatayev',
-    author: 'Makatayev',
+    title: 'Mukagali Poems',
     spine: '#B5763A',
     spineEdge: '#8A5620',
-    text: '#FDF0E0',
-    width: 25,
+    text: '#FFF3E4',
+    width: 46,
+    tilt: -2,
   },
 ];
 
@@ -37,13 +37,12 @@ export default function Books() {
             className={styles.book}
             style={{
               width: book.width,
+              transform: `rotate(${book.tilt}deg)`,
               background: `linear-gradient(to right, ${book.spineEdge} 0%, ${book.spine} 18%, ${book.spine} 82%, ${book.spineEdge} 100%)`,
             }}
+            title={book.title}
           >
-            <span
-              className={styles.bookTitle}
-              style={{ color: book.text }}
-            >
+            <span className={styles.bookTitle} style={{ color: book.text }}>
               {book.title}
             </span>
           </div>

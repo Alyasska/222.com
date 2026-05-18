@@ -14,6 +14,12 @@
   padding: 0;
 }
 
+html,
+body,
+#root {
+  min-height: 100svh;
+}
+
 html {
   font-size: 16px;
 }
@@ -21,7 +27,21 @@ html {
 body {
   font-family: var(--font-sans);
   color: var(--color-text);
-  background: var(--color-bg);
+  background: #1d1518;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+@keyframes record-spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.record-spin {
+  animation: record-spin 2.4s linear infinite;
 }
