@@ -11,10 +11,10 @@
   --wood-shelf-edge: #3e2e1c;
   --wood-shelf-top:  #8a6c48;
 
-  /* Beige wood — desk (foreground, slightly lighter under desk-lamp light) */
-  --wood-desk:      #7a5e40;
-  --wood-desk-edge: #4a3624;
-  --wood-desk-top:  #a08068;
+  /* Beige wood — desk (foreground, light sandy tone matching reference) */
+  --wood-desk:      #d4b896;
+  --wood-desk-edge: #b8946a;
+  --wood-desk-top:  #e2cba8;
 
   /* Ink / type */
   --ink:      #f4e8db;

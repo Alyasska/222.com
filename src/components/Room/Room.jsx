@@ -41,6 +41,24 @@ export default function Room() {
     setSelectedId((prev) => (prev === id ? null : id));
   }, []);
 
+  const handlePrev = useCallback(() => {
+    const visible = songs.filter((s) => !s.secret || secretUnlocked);
+    if (!visible.length) return;
+    const idx = visible.findIndex((s) => s.id === selectedId);
+    const prev = visible[(idx - 1 + visible.length) % visible.length];
+    setSelectedId(prev.id);
+    setReadySongId(null);
+  }, [selectedId, secretUnlocked]);
+
+  const handleNext = useCallback(() => {
+    const visible = songs.filter((s) => !s.secret || secretUnlocked);
+    if (!visible.length) return;
+    const idx = visible.findIndex((s) => s.id === selectedId);
+    const next = visible[(idx + 1) % visible.length];
+    setSelectedId(next.id);
+    setReadySongId(null);
+  }, [selectedId, secretUnlocked]);
+
   const handleSecret = useCallback(() => {
     setSecretUnlocked(true);
     setSecretBursting(true);
@@ -74,7 +92,7 @@ export default function Room() {
 
         <div className="desk-stage">
           <Books />
-          <VinylPlayer activeSong={activeSong} spinning={spinning} />
+          <VinylPlayer activeSong={activeSong} spinning={spinning} onPrev={handlePrev} onNext={handleNext} />
           <Mug />
           <div className="sticker">222</div>
         </div>

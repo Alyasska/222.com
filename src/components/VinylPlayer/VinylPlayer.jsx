@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import Record from "./Record.jsx";
 import Tonearm from "./Tonearm.jsx";
 
-export default function VinylPlayer({ activeSong, spinning }) {
+export default function VinylPlayer({ activeSong, spinning, onPrev, onNext }) {
   return (
     <div className="turntable">
       <div className="platter" />
@@ -28,9 +28,9 @@ export default function VinylPlayer({ activeSong, spinning }) {
       <Tonearm playing={spinning} />
 
       <div className="turntable-controls">
-        <div className="knob" />
+        <div className="knob" onClick={onPrev} title="Previous" />
         <div className={`led ${activeSong ? "on" : ""}`} />
-        <div className="knob" />
+        <div className="knob" onClick={onNext} title="Next" />
       </div>
     </div>
   );
