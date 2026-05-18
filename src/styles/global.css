@@ -65,13 +65,12 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background:
-    radial-gradient(ellipse 100vw 100vh at 50% 65%, transparent 35%, rgba(0,0,0,0.4) 85%, rgba(0,0,0,0.65) 100%);
+  background: radial-gradient(ellipse 100vw 100vh at 50% 65%, transparent 35%, rgba(0,0,0,0.4) 85%, rgba(0,0,0,0.65) 100%);
   z-index: 30;
 }
 
 /* Cozy lamp pool — warm spotlight pooling on the desk + soft warm cast */
-.cozy {
+.cozy-cast {
   position: absolute;
   inset: 0;
   pointer-events: none;
@@ -80,14 +79,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
     radial-gradient(ellipse 60vw 40vh at 50% 75%, rgba(255,200,140,0.28) 0%, rgba(255,170,110,0.10) 35%, transparent 70%),
     radial-gradient(ellipse 35vw 28vh at 78% 60%, rgba(255,170,90,0.14) 0%, transparent 60%);
   mix-blend-mode: screen;
-}
-.cozy-cast {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 29;
-  background: rgba(32,20,10,0.08);
-  mix-blend-mode: multiply;
+  opacity: 0.55;
 }
 
 /* Subtle warm dust particles up top */
@@ -420,7 +412,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
 .desk-top {
   position: absolute;
   inset: 1.2vh 0 0 0;
-  background: linear-gradient(180deg, var(--wood-desk) 0%, var(--wood-desk-edge) 100%);
+  background: var(--wood-desk);
 }
 .desk-top::after {
   content: '';
@@ -429,7 +421,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   background-image: url('/222.com/wood-grain.svg');
   background-size: 100% 100%;
   background-repeat: no-repeat;
-  opacity: 0.95;
+  opacity: 0.55;
   pointer-events: none;
 }
 .desk-top::before {
@@ -574,6 +566,47 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   30%  { opacity: 0.7; }
   100% { transform: translateY(-3vh) scaleX(1.4); opacity: 0; }
 }
+
+/* ============================================================
+   COSMETICS + POLAROID on desk
+   ============================================================ */
+.polaroid {
+  position: absolute;
+  width: 11vh;
+  background: #fff;
+  padding: 0.7vh 0.7vh 2.4vh 0.7vh;
+  box-shadow: 0.3vh 0.5vh 1.4vh rgba(0,0,0,0.28), 0 0 0 0.05vh rgba(0,0,0,0.06);
+  pointer-events: none;
+}
+.polaroid-photo {
+  width: 100%;
+  aspect-ratio: 1;
+  background: linear-gradient(135deg, #fcd4e0 0%, #f4b8c8 30%, #e890a8 60%, #d46888 100%);
+}
+.polaroid-caption {
+  text-align: center;
+  font-family: var(--font-serif);
+  font-size: 1.4vh;
+  color: #8a6060;
+  margin-top: 0.4vh;
+  letter-spacing: 0.1em;
+}
+.perfume {
+  position: absolute;
+  width: 5.5vh;
+  height: 8vh;
+  pointer-events: none;
+  filter: drop-shadow(0.6vh 0.8vh 0.8vh rgba(0,0,0,0.3));
+}
+.perfume svg { width: 100%; height: 100%; }
+.lipstick {
+  position: absolute;
+  width: 2.6vh;
+  height: 6vh;
+  pointer-events: none;
+  filter: drop-shadow(0.4vh 0.6vh 0.6vh rgba(0,0,0,0.3));
+}
+.lipstick svg { width: 100%; height: 100%; }
 
 /* "222" sticker on desk */
 .sticker {

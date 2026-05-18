@@ -1,16 +1,13 @@
 const POSTERS = [
   { title: "AMÉLIE",    year: "2001",
-    pA: "#b03838", pB: "#5a1818", accent: "#f4d4a0", accentX: "30%", accentY: "32%",
-    style: { left: "4vw",  top: "16vh", width: "10vh", height: "14vh", transform: "rotate(-7deg)" } },
-  { title: "HER",       year: "2013",
-    pA: "#c8602e", pB: "#5a2410", accent: "#ffd0b8", accentX: "55%", accentY: "30%",
-    style: { left: "19vw", top: "13vh", width: "9.5vh", height: "13vh", transform: "rotate(5deg)" } },
-  { title: "ROMA",      year: "2018",
-    pA: "#324840", pB: "#0e1a16", accent: "#a8c8c0", accentX: "50%", accentY: "35%",
-    style: { right: "19vw", top: "14vh", width: "9.5vh", height: "13vh", transform: "rotate(-4deg)" } },
-  { title: "LA LA LAND", year: "2016",
-    pA: "#3a2868", pB: "#0e0830", accent: "#f4c89e", accentX: "40%", accentY: "30%",
-    style: { right: "4vw",  top: "17vh", width: "10vh", height: "14vh", transform: "rotate(6deg)" } },
+    pA: "#9e1a1a", pB: "#4a0808", accent: "#f4c030", accentX: "50%", accentY: "58%",
+    style: { left: "4vw",  top: "15vh", width: "10vh", height: "14vh", transform: "rotate(-6deg)" } },
+  { title: "BLACK MIRROR", year: "2011",
+    pA: "#0d0d14", pB: "#050508", accent: "#38e8ff", accentX: "50%", accentY: "48%",
+    style: { left: "41vw", top: "11vh", width: "10vh", height: "14vh", transform: "rotate(3deg)" } },
+  { title: "THE PERKS OF BEING A WALLFLOWER", year: "2012",
+    pA: "#0e1928", pB: "#06101a", accent: "#ffd060", accentX: "50%", accentY: "32%",
+    style: { right: "4vw", top: "16vh", width: "10vh", height: "14vh", transform: "rotate(5deg)" } },
 ];
 
 export default function FilmPosters() {
