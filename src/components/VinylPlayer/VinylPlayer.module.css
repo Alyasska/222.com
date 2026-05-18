@@ -1,0 +1,266 @@
+/* ─── Player wrapper (holds now-playing label + desk) ──────── */
+
+.playerWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+/* ─── Now playing reveal ────────────────────────────────────── */
+
+.nowPlaying {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 18px;
+  gap: 2px;
+}
+
+.nowTitle {
+  font-family: var(--font-serif, 'Cormorant Garamond', serif);
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--color-text, #3a2a1a);
+  line-height: 1.1;
+}
+
+.nowArtist {
+  font-family: var(--font-sans, 'Nunito', sans-serif);
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--color-text-muted, #8a7060);
+  font-style: italic;
+}
+
+/* ─── Desk surface ─────────────────────────────────────────── */
+
+.desk {
+  background: linear-gradient(175deg, #C8956C 0%, #AA7040 30%, #8B5E35 70%, #7A5028 100%);
+  border-radius: 8px 8px 0 0;
+  padding: 28px 36px 0;
+  width: fit-content;
+  box-shadow:
+    0 6px 0 #5A3018,
+    0 10px 40px rgba(0, 0, 0, 0.35);
+}
+
+/* ─── Player body ──────────────────────────────────────────── */
+
+.player {
+  position: relative;
+  width: 580px;
+  height: 400px;
+  background:
+    repeating-linear-gradient(
+      87deg,
+      transparent,
+      transparent 3px,
+      rgba(0, 0, 0, 0.022) 3px,
+      rgba(0, 0, 0, 0.022) 4px
+    ),
+    linear-gradient(150deg, #3D2208 0%, #2A1505 55%, #381F0A 100%);
+  border-radius: 8px 8px 0 0;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 220, 180, 0.12),
+    inset 1px 0 0 rgba(255, 220, 180, 0.06),
+    inset -1px 0 0 rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+/* ─── Platter (the rubber mat platform) ───────────────────── */
+
+.platter {
+  position: absolute;
+  top: 50px;
+  left: 50px;
+  width: 290px;
+  height: 290px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 33%, #3C3C3C, #242424 55%, #1A1A1A 100%);
+  box-shadow:
+    0 6px 24px rgba(0, 0, 0, 0.7),
+    inset 0 2px 8px rgba(255, 255, 255, 0.06),
+    inset 0 -3px 8px rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ─── Vinyl disc ───────────────────────────────────────────── */
+
+.disc {
+  width: 268px;
+  height: 268px;
+  border-radius: 50%;
+  position: relative;
+  background:
+    repeating-radial-gradient(
+      circle at 50% 50%,
+      transparent 0px,
+      transparent 2px,
+      rgba(255, 255, 255, 0.016) 2px,
+      rgba(255, 255, 255, 0.016) 2.6px
+    ),
+    radial-gradient(circle at 50% 50%, #1C1C1C 0%, #111111 45%, #0C0C0C 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Highlight sheen across the vinyl surface */
+.disc::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(
+    125deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.02) 25%,
+    transparent 50%,
+    rgba(0, 0, 0, 0.04) 100%
+  );
+  pointer-events: none;
+}
+
+/* ─── Center label ─────────────────────────────────────────── */
+
+.label {
+  position: relative;
+  z-index: 1;
+  width: 98px;
+  height: 98px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 38% 32%, #F8D0DA, #EEB0C0 55%, #D890A4 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* ─── Spindle hole ─────────────────────────────────────────── */
+
+.spindle {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #555, #1A1A1A);
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.4);
+}
+
+/* ─── Tonearm anchor (zero-size div at pivot center) ──────── */
+
+.tonearmAnchor {
+  position: absolute;
+  top: 110px;
+  left: 420px;
+}
+
+/* 300×300 element centered on anchor so SVG center (pivot) = anchor point */
+.armSvgWrap {
+  position: absolute;
+  top: -150px;
+  left: -150px;
+  width: 300px;
+  height: 300px;
+}
+
+.armSvg {
+  width: 100%;
+  height: 100%;
+}
+
+/* ─── Controls row ─────────────────────────────────────────── */
+
+.controls {
+  position: absolute;
+  bottom: 30px;
+  left: 54px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+/* Power button */
+.powerBtn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  background: radial-gradient(circle at 38% 33%, #F08080, #C03030);
+  box-shadow:
+    0 3px 8px rgba(0, 0, 0, 0.4),
+    0 0 14px rgba(200, 40, 40, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Speed selector pill */
+.speedSelector {
+  display: flex;
+  gap: 1px;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 5px;
+  padding: 3px 4px;
+}
+
+.speed {
+  font-family: var(--font-sans, 'Nunito', sans-serif);
+  font-size: 11px;
+  padding: 3px 7px;
+  border-radius: 3px;
+  user-select: none;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.speedActive {
+  font-family: var(--font-sans, 'Nunito', sans-serif);
+  font-size: 11px;
+  padding: 3px 7px;
+  border-radius: 3px;
+  user-select: none;
+  color: rgba(255, 225, 180, 0.9);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ─── Next vinyl button ─────────────────────────────────────── */
+
+.nextVinylBtn {
+  position: absolute;
+  bottom: 28px;
+  right: 80px;
+  width: 34px;
+  height: 34px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: rgba(255, 220, 170, 0.3);
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.3s;
+  border-radius: 50%;
+}
+
+.nextVinylBtn:hover {
+  color: rgba(255, 220, 170, 0.75);
+}
+
+/* ─── Brand label ──────────────────────────────────────────── */
+
+.brandLabel {
+  position: absolute;
+  bottom: 34px;
+  right: 40px;
+  font-family: var(--font-serif, 'Cormorant Garamond', serif);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: rgba(255, 220, 170, 0.45);
+  user-select: none;
+}

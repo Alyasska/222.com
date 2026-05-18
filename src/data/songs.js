@@ -1,0 +1,42 @@
+export const songs = [
+  {
+    id: "redbone",
+    title: "Come and Get Your Love",
+    artist: "Redbone",
+    youtubeId: "HkwByCAELYo",
+    labelImage: "/record-labels/redbone.png",
+    color: "#F4A261",
+  },
+  {
+    id: "creep",
+    title: "Creep",
+    artist: "Radiohead",
+    youtubeId: "XFkzRNyygfk",
+    labelImage: "/record-labels/creep.png",
+    color: "#A8DADC",
+  },
+  {
+    id: "asleep",
+    title: "Asleep",
+    artist: "The Smiths",
+    youtubeId: "Yjd7ZdoG1SU",
+    labelImage: "/record-labels/asleep.png",
+    color: "#C3A6C9",
+  },
+  {
+    id: "please",
+    title: "Please Please Please Let Me Get What I Want",
+    artist: "The Smiths",
+    youtubeId: "6Z3vNB4gHSk",
+    labelImage: "/record-labels/please.png",
+    color: "#FFB4A2",
+  },
+  {
+    id: "kontrakt",
+    title: "Контракт",
+    artist: "Пошлая Молли",
+    youtubeId: "FIND_THIS_ID",
+    labelImage: "/record-labels/kontrakt.png",
+    color: "#B5C0D0",
+  },
+];
