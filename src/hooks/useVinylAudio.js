@@ -15,9 +15,9 @@ function buildCrackleBuffer(ctx) {
     b4 = 0.55000*b4 + w*0.5329522;
     b5 = -0.7616*b5 + w*0.0168980;
     b6 = w * 0.115926;
-    let out = (b0+b1+b2+b3+b4+b5+b6+w*0.5362) * 0.11;
+    let out = (b0+b1+b2+b3+b4+b5+b6+w*0.5362) * 0.045;
     // Rare crackle pops
-    if (Math.random() < 0.0005) out += (Math.random() - 0.5) * 0.35;
+    if (Math.random() < 0.00012) out += (Math.random() - 0.5) * 0.12;
     d[i] = Math.max(-1, Math.min(1, out));
   }
   return buf;
@@ -61,7 +61,7 @@ export function useVinylAudio(playing) {
       sourceRef.current = src;
       gain.gain.cancelScheduledValues(ctx.currentTime);
       gain.gain.setValueAtTime(0, ctx.currentTime);
-      gain.gain.linearRampToValueAtTime(0.18, ctx.currentTime + 1.4);
+      gain.gain.linearRampToValueAtTime(0.07, ctx.currentTime + 1.4);
     } else {
       const src = sourceRef.current;
       if (!src) return;
