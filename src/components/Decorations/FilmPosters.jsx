@@ -1,13 +1,13 @@
 const POSTERS = [
   { title: "AMÉLIE", year: "2001", img: "posters/amelie-print.png",
     pA: "#9e1a1a", pB: "#4a0808", accent: "#f4c030", accentX: "50%", accentY: "58%",
-    style: { left: "1.5vw", top: "8vh", width: "9vh", height: "13vh", transform: "rotate(-5deg)" } },
+      style: { left: "1.5vw", top: "6vh", width: "9vh", height: "13vh", transform: "rotate(-5deg)" } },
   { title: "BLACK MIRROR", year: "2011", img: "posters/black-mirror-print.png",
     pA: "#0d0d14", pB: "#050508", accent: "#38e8ff", accentX: "50%", accentY: "48%",
-    style: { right: "1.5vw", top: "8vh", width: "9vh", height: "13vh", transform: "rotate(4deg)" } },
+      style: { left: "3vw", top: "26vh", width: "9vh", height: "13vh", transform: "rotate(5deg)" } },
   { title: "THE PERKS OF BEING A WALLFLOWER", year: "2012", img: "posters/wallflower-print.png",
     pA: "#0e1928", pB: "#06101a", accent: "#ffd060", accentX: "50%", accentY: "32%",
-    style: { left: "2vw", top: "21vh", width: "9vh", height: "13vh", transform: "rotate(3deg)" } },
+      style: { right: "3vw", top: "26vh", width: "9vh", height: "13vh", transform: "rotate(3deg)" } },
 ];
 
 export default function FilmPosters() {

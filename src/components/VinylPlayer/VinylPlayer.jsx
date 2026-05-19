@@ -29,9 +29,21 @@ export default function VinylPlayer({ activeSong, spinning, onPrev, onNext, isFl
       <Tonearm playing={spinning} />
 
       <div className="turntable-controls">
-        <div className="knob" onClick={onPrev} title="Previous" />
+        <motion.div
+          className="knob"
+          onClick={onPrev}
+          title="Previous"
+          whileTap={{ scale: 0.86, rotate: -8 }}
+          transition={{ type: "spring", stiffness: 400, damping: 24 }}
+        />
         <div className={`led ${activeSong ? "on" : ""}`} />
-        <div className="knob" onClick={onNext} title="Next" />
+        <motion.div
+          className="knob"
+          onClick={onNext}
+          title="Next"
+          whileTap={{ scale: 0.86, rotate: 8 }}
+          transition={{ type: "spring", stiffness: 400, damping: 24 }}
+        />
       </div>
     </div>
   );

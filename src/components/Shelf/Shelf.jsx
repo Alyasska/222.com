@@ -54,7 +54,7 @@ export default function Shelf({ songs, selectedId, onSelect, secretUnlocked }) {
   return (
     <div className="shelf">
       <div className="shelf-back" />
-      <div className="shelf-items">
+      <div className="shelf-items" style={{ "--record-count": visible.length }}>
         {visible.map((song, i) => (
           <ShelfSlot
             key={song.id}

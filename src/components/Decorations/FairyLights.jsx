@@ -1,18 +1,15 @@
 import { useMemo } from "react";
 
 const BULB_COLORS = [
-  "#fff2dc",  // warm white
-  "#fff2dc",  // warm white
-  "#ffe5c0",
-  "#fff2dc",  // warm white
-  "#ffc8b8",
-  "#fff2dc",  // warm white
-  "#fff2dc",  // warm white
-  "#fff2dc",  // warm white
-  "#d4ecff",
+  "#FF8C00", // deep amber
+  "#C71585", // magenta
+  "#FF8C00",
+  "#C71585",
+  "#FF8C00",
+  "#C71585",
 ];
-const N_BULBS = 28;
-const SEGMENTS = 4;
+const N_BULBS = 20;
+const SEGMENTS = 3;
 
 export default function FairyLights() {
   const bulbs = useMemo(
@@ -21,10 +18,10 @@ export default function FairyLights() {
         const t = i / (N_BULBS - 1);
         const seg = t * SEGMENTS;
         const local = seg - Math.floor(seg);
-        const sag = Math.sin(local * Math.PI) * 2.6;
+        const sag = Math.sin(local * Math.PI) * 1.2; // reduce sag for straighter wire
         return {
           left: 2 + t * 96,
-          top: 1.6 + sag,
+          top: 2 + sag,
           color: BULB_COLORS[i % BULB_COLORS.length],
           delay: (i * 0.23) % 6,
         };
@@ -38,7 +35,7 @@ export default function FairyLights() {
       const t = i / 80;
       const seg = t * SEGMENTS;
       const local = seg - Math.floor(seg);
-      const sag = Math.sin(local * Math.PI) * 21;
+      const sag = Math.sin(local * Math.PI) * 6; // reduce overall sag
       points.push(`${(2 + t * 96).toFixed(2)},${(13 + sag).toFixed(2)}`);
     }
     return "M " + points.join(" L ");

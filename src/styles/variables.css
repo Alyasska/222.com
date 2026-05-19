@@ -6,10 +6,10 @@
   --wall-warm: #6a3a18;
   --wall-glow: #8a5828;
 
-  /* Beige wood — shelf (background, dimmer) */
-  --wood-shelf:      #6a5238;
-  --wood-shelf-edge: #3e2e1c;
-  --wood-shelf-top:  #8a6c48;
+  /* Use the same wood tokens for shelf as the desk so textures match exactly */
+  --wood-shelf:      var(--wood-desk);
+  --wood-shelf-edge: var(--wood-desk-edge);
+  --wood-shelf-top:  var(--wood-desk-top);
 
   /* Beige wood — desk (foreground, light sandy tone matching reference) */
   --wood-desk:      #d4b896;
