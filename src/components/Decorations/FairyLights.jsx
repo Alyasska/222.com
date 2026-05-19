@@ -1,8 +1,18 @@
 import { useMemo } from "react";
 
 const BULB_COLORS = [
-  "#fff2dc", "#fff2dc", "#ffe5c0", "#fff2dc",
-  "#ffc8b8", "#fff2dc", "#fff2dc", "#d4ecff",
+  "#fff2dc",  // warm white
+  "#ff3cac",  // hot pink
+  "#fff2dc",  // warm white
+  "#00f5d4",  // electric cyan
+  "#fff2dc",  // warm white
+  "#a855f7",  // soft purple
+  "#fff2dc",  // warm white
+  "#4af7ff",  // ice blue
+  "#ff6eb4",  // bubblegum pink
+  "#fff2dc",  // warm white
+  "#7df9a0",  // mint green
+  "#fff2dc",  // warm white
 ];
 const N_BULBS = 28;
 const SEGMENTS = 4;

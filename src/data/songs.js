@@ -4,6 +4,7 @@ export const songs = [
     title: "Come and Get Your Love",
     artist: "Redbone",
     youtubeId: "bc0KhhjJP98",
+    coverImage: "/222.com/covers/wovoka.png",
     labelImage: "/222.com/record-labels/redbone.svg",
     color: "#F4A261",
     sleeveA: "#c9826a",
