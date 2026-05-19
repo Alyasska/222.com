@@ -17,6 +17,7 @@ export default function Room() {
   const [readySongId, setReadySongId] = useState(null);
   const [secretUnlocked, setSecretUnlocked] = useState(false);
   const [secretBursting, setSecretBursting] = useState(false);
+  const [brightMode, setBrightMode] = useState(false);
   const swapTimer = useRef(null);
 
   const activeSong = songs.find((s) => s.id === selectedId);
@@ -65,15 +66,33 @@ export default function Room() {
     setSecretBursting(true);
   }, []);
 
+  const handleToggleBright = useCallback(() => {
+    setBrightMode((prev) => !prev);
+  }, []);
+
   return (
     <LayoutGroup>
-      <div className="room">
+      <div className={`room${brightMode ? " bright" : ""}`}>
         <div className="wall" />
         <div className="ambient" />
         <div className="dust" />
         <div className="room-dim" />
 
-        <div className="room-title">
+        <div
+          className="room-title"
+          role="button"
+          tabIndex={0}
+          onClick={handleToggleBright}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              handleToggleBright();
+            }
+          }}
+          aria-pressed={brightMode}
+          title="Toggle room light"
+        >
+          <div className="title-glow" aria-hidden="true" />
           <div className="num">222</div>
         </div>
 

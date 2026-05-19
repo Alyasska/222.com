@@ -856,7 +856,22 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   left: 5vw;
   z-index: 20;
   font-family: var(--font-serif);
-  pointer-events: none;
+  pointer-events: auto;
+  cursor: pointer;
+  user-select: none;
+}
+.room-title:focus-visible {
+  outline: 0.3vh solid rgba(255,255,255,0.6);
+  outline-offset: 0.6vh;
+  border-radius: 1vh;
+}
+.title-glow {
+  position: absolute;
+  inset: -6vh -8vw -4vh -2vw;
+  background: radial-gradient(ellipse 18vw 12vh at 30% 40%, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.6) 35%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: -1;
 }
 .room-title .num {
   font-size: 5vh;
@@ -865,6 +880,15 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   color: var(--pink-soft);
   font-weight: 600;
   text-shadow: 0 0 2vh rgba(255,180,162,0.4), 0 2px 6px rgba(0,0,0,0.6);
+}
+
+/* Bright mode: white spotlight from title, no dim overlay, LEDs off */
+.room.bright .room-dim { opacity: 0; }
+.room.bright .fairy { opacity: 0; }
+.room.bright .title-glow { opacity: 1; }
+.room.bright .room-title .num {
+  color: #ffffff;
+  text-shadow: 0 0 2.8vh rgba(255,255,255,0.9), 0 0 6vh rgba(255,255,255,0.6);
 }
 
 /* ============================================================
