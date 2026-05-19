@@ -56,7 +56,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   background:
     radial-gradient(ellipse 60vw 60vh at 50% 50%, var(--ambient) 0%, transparent 70%);
   mix-blend-mode: soft-light;
-  opacity: 0.22;
+  opacity: 0.34;
   pointer-events: none;
   transition: background 1.8s ease;
   z-index: 1;
@@ -81,7 +81,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
     radial-gradient(ellipse 60vw 40vh at 50% 75%, rgba(255,200,140,0.28) 0%, rgba(255,170,110,0.10) 35%, transparent 70%),
     radial-gradient(ellipse 35vw 28vh at 78% 60%, rgba(255,170,90,0.14) 0%, transparent 60%);
   mix-blend-mode: screen;
-  opacity: 0.18;
+  opacity: 0.3;
 }
 
 /* Subtle warm dust particles up top */
@@ -94,7 +94,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
     radial-gradient(1px 1px at 45% 12%, rgba(244,196,188,0.35), transparent 50%),
     radial-gradient(1px 1px at 22% 36%, rgba(244,196,188,0.25), transparent 50%),
     radial-gradient(1px 1px at 88% 30%, rgba(244,196,188,0.3), transparent 50%);
-  opacity: 0.2;
+  opacity: 0.3;
   pointer-events: none;
   z-index: 2;
 }
@@ -914,7 +914,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
 .room-dim {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.62);
+  background: rgba(0,0,0,0.5);
   mix-blend-mode: multiply;
   pointer-events: none;
   z-index: 16;
@@ -924,10 +924,21 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   position: absolute;
   left: 0;
   right: 0;
-  top: 3vh;
-  height: 10vh;
+  top: 2vh;
+  height: 7vh;
   z-index: 22;
   pointer-events: none;
+}
+.fairy::before {
+  content: '';
+  position: absolute;
+  left: 2vw;
+  right: 2vw;
+  top: 0.6vh;
+  height: 1.2vh;
+  border-radius: 0.6vh;
+  background: linear-gradient(90deg, rgba(255,70,100,0.55), rgba(255,230,236,0.85), rgba(255,70,100,0.55));
+  box-shadow: 0 0 1.6vh rgba(255,140,170,0.6);
 }
 .fairy-wire {
   position: absolute;
@@ -937,15 +948,15 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
 }
 .fairy-wire path {
   fill: none;
-  stroke: rgba(255,255,255,0.04);
-  stroke-width: 0.3;
+  stroke: rgba(255,255,255,0.0);
+  stroke-width: 0.1;
   stroke-linecap: round;
 }
 .fairy-light {
   position: absolute;
-  width: 2.2vh;
-  height: 0.55vh;
-  border-radius: 0.2vh;
+  width: 1.9vh;
+  height: 0.5vh;
+  border-radius: 0.15vh;
   transform: translate(-50%, -50%);
   background: linear-gradient(
     90deg,
@@ -954,10 +965,10 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
     color-mix(in oklab, var(--bulb) 60%, black) 100%
   );
   box-shadow:
-    0 0 0.7vh 0.35vh var(--bulb, #fff2dc),
-    0 0 3vh 1.4vh color-mix(in oklab, var(--bulb) 80%, transparent),
-    0 0 7vh 2.8vh color-mix(in oklab, var(--bulb) 45%, transparent),
-    0 0 14vh 5vh color-mix(in oklab, var(--bulb) 20%, transparent);
+    0 0 0.6vh 0.3vh var(--bulb, #fff2dc),
+    0 0 2.8vh 1.2vh color-mix(in oklab, var(--bulb) 80%, transparent),
+    0 0 6vh 2.4vh color-mix(in oklab, var(--bulb) 45%, transparent),
+    0 0 12vh 4vh color-mix(in oklab, var(--bulb) 20%, transparent);
   animation: bulb-flicker 5s ease-in-out infinite;
 }
 @keyframes bulb-flicker {

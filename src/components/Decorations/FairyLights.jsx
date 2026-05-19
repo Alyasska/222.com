@@ -1,27 +1,22 @@
 import { useMemo } from "react";
 
 const BULB_COLORS = [
-  "#FF8C00", // deep amber
-  "#C71585", // magenta
-  "#FF8C00",
-  "#C71585",
-  "#FF8C00",
-  "#C71585",
+  "#ff4d6d", // red
+  "#fff1f3", // soft white
+  "#ff4d6d",
+  "#fff1f3",
 ];
-const N_BULBS = 20;
-const SEGMENTS = 3;
+const N_BULBS = 18;
+const SEGMENTS = 1;
 
 export default function FairyLights() {
   const bulbs = useMemo(
     () =>
       Array.from({ length: N_BULBS }, (_, i) => {
         const t = i / (N_BULBS - 1);
-        const seg = t * SEGMENTS;
-        const local = seg - Math.floor(seg);
-        const sag = Math.sin(local * Math.PI) * 1.2; // reduce sag for straighter wire
         return {
-          left: 2 + t * 96,
-          top: 2 + sag,
+          left: 3 + t * 94,
+          top: 2,
           color: BULB_COLORS[i % BULB_COLORS.length],
           delay: (i * 0.23) % 6,
         };
@@ -29,17 +24,7 @@ export default function FairyLights() {
     []
   );
 
-  const wirePath = useMemo(() => {
-    const points = [];
-    for (let i = 0; i <= 80; i++) {
-      const t = i / 80;
-      const seg = t * SEGMENTS;
-      const local = seg - Math.floor(seg);
-      const sag = Math.sin(local * Math.PI) * 6; // reduce overall sag
-      points.push(`${(2 + t * 96).toFixed(2)},${(13 + sag).toFixed(2)}`);
-    }
-    return "M " + points.join(" L ");
-  }, []);
+  const wirePath = useMemo(() => "M 2 10 L 98 10", []);
 
   return (
     <div className="fairy" aria-hidden="true">
