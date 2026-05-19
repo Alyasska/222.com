@@ -996,12 +996,13 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
 .macbook {
   position: absolute;
   right: 3vw;
-  bottom: 16vh;
+  bottom: 38vh;
   width: 28vh;
   height: 28vh;
   transform: rotate(25deg);
   pointer-events: none;
   z-index: 14;
+  filter: drop-shadow(0.6vh 0.8vh 1vh rgba(0,0,0,0.28));
 }
 .macbook-screen {
   position: absolute;
@@ -1032,7 +1033,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   pointer-events: none;
   z-index: 13;
   background: radial-gradient(
-    ellipse 38vw 45vh at 94% 62%,
+    ellipse 38vw 45vh at 94% 42%,
     rgba(160,210,255,0.28) 0%,
     rgba(100,180,255,0.12) 35%,
     transparent 68%
