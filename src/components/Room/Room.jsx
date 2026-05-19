@@ -8,6 +8,7 @@ import Mug from "../Decorations/Mug.jsx";
 import FairyLights from "../Decorations/FairyLights.jsx";
 import FilmPosters from "../Decorations/FilmPosters.jsx";
 import TableDecor from "../Decorations/TableDecor.jsx";
+import MacBook from "../Decorations/MacBook.jsx";
 import SecretCode from "../SecretCode/SecretCode.jsx";
 import YouTubeHost from "../VinylPlayer/YouTubeHost.jsx";
 import { useVinylAudio } from "../../hooks/useVinylAudio.js";
@@ -115,6 +116,7 @@ export default function Room() {
           <VinylPlayer activeSong={activeSong} spinning={spinning} onPrev={handlePrev} onNext={handleNext} />
           <Mug />
           <TableDecor />
+          <MacBook />
         </div>
 
         {activeSong && (
@@ -132,6 +134,8 @@ export default function Room() {
 
         <div className="cozy-cast" />
         <div className="cozy" />
+        <div className="macbook-room-glow" />
+        <div className="fairy-room-glow" />
         <div className="vignette" />
 
         <YouTubeHost
