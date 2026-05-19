@@ -56,7 +56,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   background:
     radial-gradient(ellipse 60vw 60vh at 50% 50%, var(--ambient) 0%, transparent 70%);
   mix-blend-mode: soft-light;
-  opacity: 0.34;
+  opacity: 0.46;
   pointer-events: none;
   transition: background 1.8s ease;
   z-index: 1;
@@ -81,7 +81,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
     radial-gradient(ellipse 60vw 40vh at 50% 75%, rgba(255,200,140,0.28) 0%, rgba(255,170,110,0.10) 35%, transparent 70%),
     radial-gradient(ellipse 35vw 28vh at 78% 60%, rgba(255,170,90,0.14) 0%, transparent 60%);
   mix-blend-mode: screen;
-  opacity: 0.3;
+  opacity: 0.42;
 }
 
 /* Subtle warm dust particles up top */
@@ -94,7 +94,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
     radial-gradient(1px 1px at 45% 12%, rgba(244,196,188,0.35), transparent 50%),
     radial-gradient(1px 1px at 22% 36%, rgba(244,196,188,0.25), transparent 50%),
     radial-gradient(1px 1px at 88% 30%, rgba(244,196,188,0.3), transparent 50%);
-  opacity: 0.3;
+  opacity: 0.4;
   pointer-events: none;
   z-index: 2;
 }
@@ -914,7 +914,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
 .room-dim {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0,0,0,0.4);
   mix-blend-mode: multiply;
   pointer-events: none;
   z-index: 16;
@@ -934,9 +934,9 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   position: absolute;
   left: 2vw;
   right: 2vw;
-  top: 0.6vh;
-  height: 1.2vh;
-  border-radius: 0.6vh;
+  top: 1vh;
+  height: 0.8vh;
+  border-radius: 0.4vh;
   background: linear-gradient(90deg, rgba(255,70,100,0.55), rgba(255,230,236,0.85), rgba(255,70,100,0.55));
   box-shadow: 0 0 1.6vh rgba(255,140,170,0.6);
 }

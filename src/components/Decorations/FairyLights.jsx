@@ -16,7 +16,7 @@ export default function FairyLights() {
         const t = i / (N_BULBS - 1);
         return {
           left: 3 + t * 94,
-          top: 2,
+          top: 1.4,
           color: BULB_COLORS[i % BULB_COLORS.length],
           delay: (i * 0.23) % 6,
         };
