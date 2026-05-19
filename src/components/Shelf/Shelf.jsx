@@ -1,12 +1,11 @@
-import { useMemo } from "react";
 import { motion } from "framer-motion";
 import Record from "../VinylPlayer/Record.jsx";
 
-function ShelfSlot({ song, isSelected, onSelect, tilt }) {
+function ShelfSlot({ song, isSelected, onSelect, slotIndex }) {
   return (
     <div
-      className="shelf-slot"
-      style={{ transform: `rotate(${tilt}deg)` }}
+      className={`shelf-slot${isSelected ? " selected" : ""}`}
+      style={{ "--slot-i": slotIndex }}
       onClick={() => onSelect(song.id)}
     >
       {!isSelected && (
@@ -51,14 +50,10 @@ function ShelfSlot({ song, isSelected, onSelect, tilt }) {
 
 export default function Shelf({ songs, selectedId, onSelect, secretUnlocked }) {
   const visible = songs.filter((s) => !s.secret || secretUnlocked);
-  const tilts = useMemo(
-    () => visible.map((_, i) => ((i * 37) % 7) - 3),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [visible.length]
-  );
 
   return (
     <div className="shelf">
+      <div className="shelf-back" />
       <div className="shelf-items">
         {visible.map((song, i) => (
           <ShelfSlot
@@ -66,10 +61,12 @@ export default function Shelf({ songs, selectedId, onSelect, secretUnlocked }) {
             song={song}
             isSelected={selectedId === song.id}
             onSelect={onSelect}
-            tilt={tilts[i]}
+            slotIndex={i}
           />
         ))}
       </div>
+      <div className="shelf-divider" style={{ left: "33.3%" }} />
+      <div className="shelf-divider" style={{ left: "66.6%" }} />
       <div className="shelf-top" />
       <div className="shelf-front" />
       <div className="shelf-bracket left" />

@@ -177,10 +177,47 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   position: absolute;
   left: 8vw;
   right: 8vw;
-  top: 32vh;
+  top: 26vh;
   height: 2.2vh;
   z-index: 5;
 }
+
+/* Wooden back panel — fills the wall area behind/above the shelf */
+.shelf-back {
+  position: absolute;
+  inset: -20vh 0 -0.6vh 0;
+  background: linear-gradient(180deg, var(--wood-shelf-top) 0%, var(--wood-shelf) 100%);
+  z-index: -1;
+}
+.shelf-back::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('/222.com/wood-grain.svg');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+/* Vertical wood partition dividers */
+.shelf-divider {
+  position: absolute;
+  top: -20vh;
+  bottom: 0;
+  width: 1.4vh;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg,
+    var(--wood-shelf-edge) 0%,
+    var(--wood-shelf-top) 40%,
+    var(--wood-shelf-top) 60%,
+    var(--wood-shelf-edge) 100%);
+  box-shadow:
+    0.4vh 0 1vh rgba(0,0,0,0.45),
+    -0.3vh 0 0.6vh rgba(0,0,0,0.25);
+  z-index: 3;
+}
+
 .shelf-top {
   position: absolute;
   inset: 0 0 auto 0;
@@ -208,19 +245,21 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
 .shelf-bracket.right { right: 4%; }
 
 /* ============================================================
-   RECORDS ON SHELF
+   RECORDS ON SHELF — center section, 3D perspective tilt
    ============================================================ */
 .shelf-items {
   position: absolute;
-  left: 0;
-  right: 0;
+  left: 33.3%;
+  right: 33.3%;
   bottom: 100%;
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  gap: 1.2vw;
-  padding: 0 2vw;
+  gap: 0;
+  padding: 0 1vw;
   height: 22vh;
+  perspective: 900px;
+  perspective-origin: 50% 110%;
 }
 .shelf-slot {
   position: relative;
@@ -230,6 +269,20 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   align-items: flex-end;
   justify-content: center;
   cursor: pointer;
+  transform-style: preserve-3d;
+  transform: rotateY(14deg);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), z-index 0s;
+  margin-left: -1.8vh;
+  z-index: 1;
+}
+.shelf-slot:first-child { margin-left: 0; }
+.shelf-slot:hover {
+  transform: rotateY(0deg) translateZ(2vh) translateY(-1vh);
+  z-index: 10;
+}
+.shelf-slot.selected {
+  transform: rotateY(0deg);
+  z-index: 10;
 }
 .sleeve {
   position: relative;
@@ -585,47 +638,13 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
 }
 .polaroid-cam svg { display: block; width: 100%; height: auto; }
 
-/* "222" sticker on desk */
-.sticker {
+/* Table decoration images — top-down view flowers & cosmetics */
+.table-decor {
   position: absolute;
-  left: 4vw;
-  bottom: 4vh;
-  width: 8vh;
-  height: 8vh;
-  border-radius: 50%;
-  background: var(--pink-soft);
-  color: var(--wall-deep);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-serif);
-  font-size: 3vh;
-  font-weight: 700;
-  letter-spacing: -0.04em;
-  transform: rotate(-14deg);
-  box-shadow:
-    inset 0 0 0 1px rgba(0,0,0,0.1),
-    inset 0 -0.4vh 0.6vh rgba(0,0,0,0.15),
-    0.8vh 1.2vh 1.6vh rgba(0,0,0,0.55);
   pointer-events: none;
-}
-.sticker::before {
-  content: '';
-  position: absolute;
-  inset: -3%;
-  border-radius: 50%;
-  border: 0.3vh dashed rgba(255,255,255,0.5);
-  opacity: 0.55;
-}
-.sticker::after {
-  content: '.com';
-  position: absolute;
-  bottom: 1.6vh;
-  font-size: 0.9vh;
-  font-family: var(--font-sans);
-  letter-spacing: 0.2em;
-  opacity: 0.65;
-  font-weight: 800;
+  filter: drop-shadow(0.8vh 1vh 1.2vh rgba(0,0,0,0.45));
+  object-fit: contain;
+  z-index: 13;
 }
 
 /* ============================================================

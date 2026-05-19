@@ -1,10 +1,10 @@
 /* All design tokens in one place. Tweak these and the whole room shifts. */
 :root {
-  /* Dim-night light lime-green wall (cork pinboard) */
-  --wall-deep: #1a2812;
-  --wall-mid:  #3e5818;
-  --wall-warm: #5e7e28;
-  --wall-glow: #88aa40;
+  /* Dim-night brown wall (cork pinboard) */
+  --wall-deep: #1a1208;
+  --wall-mid:  #3a2010;
+  --wall-warm: #6a3a18;
+  --wall-glow: #8a5828;
 
   /* Beige wood — shelf (background, dimmer) */
   --wood-shelf:      #6a5238;

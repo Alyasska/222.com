@@ -7,6 +7,7 @@ import Books from "../Decorations/Books.jsx";
 import Mug from "../Decorations/Mug.jsx";
 import FairyLights from "../Decorations/FairyLights.jsx";
 import FilmPosters from "../Decorations/FilmPosters.jsx";
+import TableDecor from "../Decorations/TableDecor.jsx";
 import SecretCode from "../SecretCode/SecretCode.jsx";
 import YouTubeHost from "../VinylPlayer/YouTubeHost.jsx";
 import { useVinylAudio } from "../../hooks/useVinylAudio.js";
@@ -94,7 +95,7 @@ export default function Room() {
           <Books />
           <VinylPlayer activeSong={activeSong} spinning={spinning} onPrev={handlePrev} onNext={handleNext} />
           <Mug />
-          <div className="sticker">222</div>
+          <TableDecor />
         </div>
 
         {activeSong && (
