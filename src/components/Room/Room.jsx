@@ -92,7 +92,6 @@ export default function Room() {
           aria-pressed={brightMode}
           title="Toggle room light"
         >
-          <div className="title-glow" aria-hidden="true" />
           <div className="num">222</div>
         </div>
 
