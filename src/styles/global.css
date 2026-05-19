@@ -44,7 +44,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   background-image: url('/222.com/cork.svg');
   background-repeat: repeat;
   background-size: 280px 280px;
-  opacity: 1.0;
+  opacity: 0.9;
   pointer-events: none;
 }
 
@@ -103,7 +103,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
 .posters {
   position: absolute;
   inset: 0 0 50vh 0;
-  z-index: 7;
+  z-index: 4;
   pointer-events: none;
 }
 .poster {
@@ -186,20 +186,15 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
    Uses CSS-only vertical stripe grain so it looks clearly distinct from the desk. */
 .shelf-back {
   position: absolute;
-  inset: -15vh 0 -0.6vh 0;
-  background:
-    repeating-linear-gradient(90deg,
-      rgba(0,0,0,0.14) 0px, rgba(0,0,0,0) 2px,
-      rgba(0,0,0,0) 16px, rgba(0,0,0,0.09) 18px,
-      rgba(0,0,0,0) 19px, rgba(0,0,0,0) 28px),
-    linear-gradient(180deg, var(--wood-shelf-top) 0%, var(--wood-shelf) 100%);
+  inset: -20vh 0 -0.6vh 0;
+  background: linear-gradient(180deg, var(--wood-shelf-top) 0%, var(--wood-shelf) 100%);
   z-index: -1;
 }
 
 /* Vertical wood partition dividers */
 .shelf-divider {
   position: absolute;
-  top: -15vh;
+  top: -20vh;
   bottom: 0;
   width: 1.4vh;
   transform: translateX(-50%);
@@ -259,9 +254,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
 }
 .shelf-slot {
   position: relative;
-  flex: 0 0 calc(100% / var(--record-count, 5));
-  width: calc(100% / var(--record-count, 5));
-  max-width: 14vh;
+  width: 13vh;
   height: 18vh;
   display: flex;
   align-items: flex-end;
@@ -270,6 +263,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   transform-style: preserve-3d;
   transform: rotateY(14deg);
   transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), z-index 0s;
+  margin-left: -1.8vh;
   z-index: 1;
 }
 .shelf-slot:hover {
@@ -642,26 +636,6 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   object-fit: contain;
   z-index: 13;
 }
-.table-vase {
-  position: absolute;
-  pointer-events: none;
-  z-index: 13;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  filter: drop-shadow(0.8vh 1vh 1.2vh rgba(0,0,0,0.45));
-}
-.table-vase img { width: 100%; display: block; }
-.table-vase::after {
-  content: '';
-  width: 45%;
-  height: 2.2vh;
-  background: linear-gradient(180deg, #c8a87a 0%, #8a6840 100%);
-  border-radius: 0.4vh 0.4vh 1vh 1vh;
-  box-shadow: 0 0.4vh 0.8vh rgba(0,0,0,0.4);
-  margin-top: -0.4vh;
-}
-
 /* ============================================================
    TURNTABLE INTERNALS
    ============================================================ */
@@ -943,17 +917,17 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
 }
 .fairy-light {
   position: absolute;
-  width: 1.1vh;
-  height: 1.1vh;
+  width: 1vh;
+  height: 1vh;
   border-radius: 50%;
   transform: translate(-50%, -50%);
   background:
-    radial-gradient(circle at 40% 35%, rgba(255,255,255,1) 0%, var(--bulb, #fff2dc) 45%, color-mix(in oklab, var(--bulb) 55%, black) 100%);
+    radial-gradient(circle at 40% 35%, rgba(255,255,255,1) 0%, var(--bulb, #fff2dc) 50%, color-mix(in oklab, var(--bulb) 60%, black) 100%);
   box-shadow:
-    0 0 0.5vh 0.3vh var(--bulb, #fff2dc),
-    0 0 2.4vh 1.2vh color-mix(in oklab, var(--bulb) 85%, transparent),
-    0 0 7vh 2.8vh color-mix(in oklab, var(--bulb) 48%, transparent),
-    0 0 16vh 6vh color-mix(in oklab, var(--bulb) 20%, transparent);
+    0 0 0.6vh 0.3vh var(--bulb, #fff2dc),
+    0 0 2.4vh 1vh color-mix(in oklab, var(--bulb) 80%, transparent),
+    0 0 6vh 2vh color-mix(in oklab, var(--bulb) 40%, transparent),
+    0 0 12vh 4vh color-mix(in oklab, var(--bulb) 15%, transparent);
   animation: bulb-flicker 5s ease-in-out infinite;
 }
 @keyframes bulb-flicker {
