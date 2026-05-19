@@ -6,7 +6,7 @@ export default function TableDecor() {
         src="/222.com/table/tulips.png"
         alt=""
         className="table-decor"
-        style={{ left: "6vw", bottom: "8vh", width: "28vh", transform: "rotate(-8deg)" }}
+        style={{ left: "4vw", bottom: "6vh", width: "32vh", transform: "rotate(-8deg)" }}
       />
 
       {/* Cosmetics — right side of desk */}
@@ -14,7 +14,7 @@ export default function TableDecor() {
         src="/222.com/table/cosmetics.png"
         alt=""
         className="table-decor"
-        style={{ right: "5vw", bottom: "16vh", width: "22vh", transform: "rotate(6deg)" }}
+        style={{ right: "12vw", bottom: "20vh", width: "26vh", transform: "rotate(6deg)" }}
       />
     </>
   );

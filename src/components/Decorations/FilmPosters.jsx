@@ -1,7 +1,7 @@
 const POSTERS = [
   { title: "AMÉLIE", year: "2001", img: "posters/amelie-print.png",
     pA: "#9e1a1a", pB: "#4a0808", accent: "#f4c030", accentX: "50%", accentY: "58%",
-      style: { left: "1.5vw", top: "6vh", width: "9vh", height: "13vh", transform: "rotate(-5deg)" } },
+      style: { left: "12vw", top: "28vh", width: "9vh", height: "13vh", transform: "rotate(-5deg)" } },
   { title: "BLACK MIRROR", year: "2011", img: "posters/black-mirror-print.png",
     pA: "#0d0d14", pB: "#050508", accent: "#38e8ff", accentX: "50%", accentY: "48%",
       style: { left: "3vw", top: "26vh", width: "9vh", height: "13vh", transform: "rotate(5deg)" } },

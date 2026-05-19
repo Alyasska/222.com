@@ -71,6 +71,7 @@ export default function Room() {
         <div className="wall" />
         <div className="ambient" />
         <div className="dust" />
+        <div className="room-dim" />
 
         <div className="room-title">
           <div className="num">222</div>
