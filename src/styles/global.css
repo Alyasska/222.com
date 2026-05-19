@@ -176,23 +176,33 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
    ============================================================ */
 .shelf {
   position: absolute;
-  left: 8vw;
-  right: 8vw;
+  left: 0;
+  right: 0;
   top: 0;
   height: 25vh;
   z-index: 5;
 }
 
 /* Wooden back panel — fills the wall area behind/above the shelf.
-   Uses CSS-only vertical stripe grain so it looks clearly distinct from the desk. */
+   Uses the same wood grain texture as the desk. */
 .shelf-back {
   position: absolute;
-  left: 8vw;
-  right: 8vw;
+  left: 0;
+  right: 0;
   top: 0;
   height: 25vh;
-  background: linear-gradient(180deg, var(--wood-shelf-top) 0%, var(--wood-shelf) 100%);
+  background: linear-gradient(180deg, var(--wood-desk-top) 0%, var(--wood-desk) 100%);
   z-index: -1;
+}
+.shelf-back::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('/222.com/wood-grain.svg');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  opacity: 0.55;
+  pointer-events: none;
 }
 
 /* Vertical wood partition dividers */
@@ -217,16 +227,25 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   position: absolute;
   inset: 0 0 auto 0;
   height: 0.6vh;
-  background: linear-gradient(180deg, var(--wood-shelf-top) 0%, var(--wood-shelf) 100%);
+  background: linear-gradient(180deg, var(--wood-desk-top) 0%, var(--wood-desk) 100%);
   border-radius: 1px;
 }
 .shelf-front {
   position: absolute;
   inset: 0.6vh 0 0 0;
-  background:
-    repeating-linear-gradient(90deg, rgba(0,0,0,0.18) 0px, transparent 2px, transparent 60px, rgba(0,0,0,0.1) 62px),
-    linear-gradient(180deg, var(--wood-shelf) 0%, var(--wood-shelf-edge) 100%);
+  background: linear-gradient(180deg, var(--wood-desk-top) 0%, var(--wood-desk) 60%, var(--wood-desk-edge) 100%);
   box-shadow: 0 0.4vh 1.6vh rgba(0,0,0,0.55);
+  z-index: 2;
+}
+.shelf-front::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('/222.com/wood-grain.svg');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  opacity: 0.55;
+  pointer-events: none;
 }
 .shelf-bracket {
   position: absolute;
@@ -255,6 +274,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   height: 22vh;
   perspective: 900px;
   perspective-origin: 50% 110%;
+  z-index: 4;
 }
 .shelf-slot {
   position: relative;
