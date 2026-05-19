@@ -14,7 +14,7 @@ export default function TableDecor() {
         src="/222.com/table/cosmetics.png"
         alt=""
         className="table-decor"
-        style={{ right: "5vw", bottom: "14vh", width: "22vh", transform: "rotate(6deg)" }}
+        style={{ right: "5vw", bottom: "16vh", width: "22vh", transform: "rotate(6deg)" }}
       />
     </>
   );

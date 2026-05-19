@@ -246,11 +246,11 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   position: absolute;
   left: 33.3%;
   right: 33.3%;
-  bottom: 0;
+  bottom: 100%;
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  gap: 1%;
+  gap: 0;
   padding: 0 1vw;
   height: 22vh;
   perspective: 900px;
@@ -258,9 +258,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
 }
 .shelf-slot {
   position: relative;
-  flex: 0 0 calc(100% / var(--record-count, 5));
-  width: calc(100% / var(--record-count, 5));
-  max-width: 14vh;
+  width: 13vh;
   height: 18vh;
   display: flex;
   align-items: flex-end;
@@ -269,6 +267,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   transform-style: preserve-3d;
   transform: rotateY(14deg);
   transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), z-index 0s;
+  margin-left: -1.8vh;
   z-index: 1;
 }
 .shelf-slot:hover {
