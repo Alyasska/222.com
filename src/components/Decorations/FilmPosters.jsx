@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import PosterZoom from "./PosterZoom";
 
@@ -37,6 +37,17 @@ const POSTERS = [
 
 export default function FilmPosters() {
   const [zoomed, setZoomed] = useState(null);
+  const refs = useRef({});
+
+  function handleClick(p, i) {
+    if (zoomed) return;
+    const el = refs.current[i];
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const originX = rect.left + rect.width  / 2 - window.innerWidth  / 2;
+    const originY = rect.top  + rect.height / 2 - window.innerHeight / 2;
+    setZoomed({ ...p, index: i, originX, originY });
+  }
 
   return (
     <>
@@ -44,6 +55,7 @@ export default function FilmPosters() {
         {POSTERS.map((p, i) => (
           <motion.div
             key={i}
+            ref={el => (refs.current[i] = el)}
             className="poster"
             style={{
               ...p.pos,
@@ -69,7 +81,7 @@ export default function FilmPosters() {
               scale: 0.96,
               transition: { duration: 0.08 },
             }}
-            onClick={() => !zoomed && setZoomed({ ...p, index: i })}
+            onClick={() => handleClick(p, i)}
             transition={{ opacity: { duration: 0.15 } }}
           >
             <img
@@ -78,7 +90,6 @@ export default function FilmPosters() {
               alt=""
               onError={(e) => { e.target.style.display = "none"; }}
             />
-            {/* accent glow only — no text */}
             <div className="p-inner" />
           </motion.div>
         ))}

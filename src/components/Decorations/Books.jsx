@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import BookReader from "./BookReader";
 
@@ -31,12 +31,24 @@ const SCATTER_BOOKS = [
 
 export default function Books() {
   const [openBook, setOpenBook] = useState(null);
+  const refs = useRef({});
+
+  function handleClick(b, i) {
+    if (openBook) return;
+    const el = refs.current[i];
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const originX = rect.left + rect.width  / 2 - window.innerWidth  / 2;
+    const originY = rect.top  + rect.height / 2 - window.innerHeight / 2;
+    setOpenBook({ ...b, index: i, originX, originY });
+  }
 
   return (
     <>
       {SCATTER_BOOKS.map((b, i) => (
         <motion.div
           key={i}
+          ref={el => (refs.current[i] = el)}
           className="scatter-book"
           style={{
             ...b.style,
@@ -45,9 +57,14 @@ export default function Books() {
             rotate: b.rotation,
           }}
           animate={{ opacity: openBook?.index === i ? 0 : 1 }}
-          whileHover={openBook ? {} : { scale: 1.07 }}
-          onClick={() => !openBook && setOpenBook({ ...b, index: i })}
-          transition={{ duration: 0.18 }}
+          whileHover={openBook ? {} : {
+            scale: 1.07,
+            y: -6,
+            transition: { type: "spring", stiffness: 300, damping: 20 },
+          }}
+          whileTap={openBook ? {} : { scale: 0.95, transition: { duration: 0.08 } }}
+          onClick={() => handleClick(b, i)}
+          transition={{ opacity: { duration: 0.15 } }}
         >
           {b.coverImage && (
             <img

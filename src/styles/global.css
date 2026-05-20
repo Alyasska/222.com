@@ -591,14 +591,17 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
 .scatter-book.open .title { font-style: normal; font-size: 1.1vh; opacity: 0.5; }
 
 /* TEA MUG */
-.mug {
+.mug-outer {
   position: absolute;
   left: 24vw;
   bottom: 4vh;
+  pointer-events: auto;
+  filter: drop-shadow(0.7vh 1.1vh 1.6vh rgba(0,0,0,0.55));
+  transform-origin: bottom center;
+}
+.mug {
   width: 15vh;
   height: 15vh;
-  pointer-events: none;
-  filter: drop-shadow(0.7vh 1.1vh 1.6vh rgba(0,0,0,0.55));
   transform: scaleX(-1);
   transform-origin: center;
 }
@@ -611,7 +614,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   height: 6vh;
   transform: translateX(-50%);
   pointer-events: none;
-  opacity: 0.55;
+  transition: opacity 0.5s ease;
 }
 .mug-steam path {
   stroke: rgba(255,240,220,0.55);
@@ -620,6 +623,10 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   stroke-linecap: round;
   animation: steam-rise 4s ease-in-out infinite;
   transform-origin: bottom center;
+}
+.mug-sipping .mug-steam path {
+  animation-duration: 1.6s;
+  stroke: rgba(255,240,220,0.8);
 }
 .mug-steam path:nth-child(2) { animation-delay: 0.8s; }
 .mug-steam path:nth-child(3) { animation-delay: 1.6s; }
@@ -1080,8 +1087,10 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   display: flex;
   flex-direction: column;
   cursor: default;
-  /* shadow around the whole book object */
-  filter: drop-shadow(0 1.6vh 4vh rgba(0,0,0,0.7));
+  /* Perspective tilt — like an open book lying on a table toward you */
+  perspective: 2200px;
+  perspective-origin: 50% 60%;
+  filter: drop-shadow(0 2.4vh 6vh rgba(0,0,0,0.72)) drop-shadow(0 0.6vh 1.2vh rgba(0,0,0,0.5));
 }
 
 .book-close {
@@ -1109,11 +1118,15 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
 .book-spread {
   display: flex;
   align-items: stretch;
-  border-radius: 1px 3px 3px 1px;
+  border-radius: 2px 4px 4px 2px;
   overflow: hidden;
   box-shadow:
-    0 0 0 1px rgba(0,0,0,0.35),
-    0 4px 24px rgba(0,0,0,0.5);
+    0 0 0 1px rgba(0,0,0,0.38),
+    0 6px 28px rgba(0,0,0,0.52),
+    0 1px 4px rgba(0,0,0,0.3);
+  /* Slight physical tilt — like the book is resting open */
+  transform: rotateX(2deg);
+  transform-style: preserve-3d;
 }
 
 .book-spread-loading {
@@ -1122,14 +1135,58 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   min-height: 55vh;
   justify-content: center;
   align-items: center;
-  border-radius: 1px 3px 3px 1px;
+  border-radius: 2px 4px 4px 2px;
 }
 
-.book-loading-inner {
+/* Loading progress bar */
+.book-load-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.4vh;
+}
+
+.book-load-title {
   font-family: var(--font-serif);
-  font-size: 2vh;
+  font-size: 1.8vh;
   font-style: italic;
-  color: rgba(80,40,20,0.45);
+  color: rgba(80,40,20,0.5);
+  letter-spacing: 0.04em;
+}
+
+.book-load-bar-track {
+  width: 18vh;
+  height: 0.4vh;
+  background: rgba(80,40,20,0.12);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.book-load-bar-fill {
+  height: 100%;
+  background: rgba(80,40,20,0.38);
+  border-radius: 999px;
+}
+
+.book-load-pct {
+  font-family: var(--font-sans);
+  font-size: 1.1vh;
+  color: rgba(80,40,20,0.3);
+  letter-spacing: 0.08em;
+}
+
+/* Waiting-for-preload hint */
+.book-wait-hint {
+  position: absolute;
+  bottom: 1.2vh;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-serif);
+  font-size: 1.2vh;
+  font-style: italic;
+  color: rgba(80,40,20,0.38);
+  pointer-events: none;
+  white-space: nowrap;
 }
 
 /* Each page half */
@@ -1304,11 +1361,12 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   top: 50%;
   left: 50%;
   z-index: 101;
-  border-radius: 0.5vh;
+  border-radius: 0.8vh;
   overflow: hidden;
   box-shadow:
-    inset 0 0 0 0.6vh rgba(255,240,220,0.85),
-    0 2vh 8vh rgba(0,0,0,0.75);
+    inset 0 0 0 0.5vh rgba(255,240,220,0.8),
+    0 3vh 12vh rgba(0,0,0,0.78),
+    0 1vh 3vh rgba(0,0,0,0.45);
   background: linear-gradient(160deg, var(--p-a, #2a3a48) 0%, var(--p-b, #0a1018) 100%);
   cursor: default;
   max-height: 88vh;

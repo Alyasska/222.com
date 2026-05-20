@@ -10,6 +10,10 @@ export default function PosterZoom({ poster, onClose }) {
     return () => window.removeEventListener("keydown", handleKey);
   }, [onClose]);
 
+  // Animate FROM the poster's screen center TO the viewport center
+  const ox = poster.originX ?? 0;
+  const oy = poster.originY ?? 0;
+
   return (
     <>
       <motion.div
@@ -17,7 +21,7 @@ export default function PosterZoom({ poster, onClose }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        transition={{ duration: 0.2 }}
+        transition={{ duration: 0.28 }}
         onClick={onClose}
       />
 
@@ -25,17 +29,16 @@ export default function PosterZoom({ poster, onClose }) {
         className="poster-zoomed"
         style={{
           x: "-50%",
-          y: "-50%",
-          "--p-a": poster.pA,
-          "--p-b": poster.pB,
-          "--accent": poster.accent,
+          "--p-a":      poster.pA,
+          "--p-b":      poster.pB,
+          "--accent":   poster.accent,
           "--accent-x": poster.accentX,
           "--accent-y": poster.accentY,
         }}
-        initial={{ scale: 0.06, opacity: 0, y: "calc(-50% + 22vh)" }}
-        animate={{ scale: 1, opacity: 1, y: "-50%" }}
-        exit={{ scale: 0.06, opacity: 0, y: "calc(-50% + 22vh)" }}
-        transition={{ type: "spring", stiffness: 260, damping: 26 }}
+        initial={{ scale: 0.06, x: `calc(-50% + ${ox}px)`, y: `calc(-50% + ${oy}px)`, opacity: 0 }}
+        animate={{ scale: 1,    x: "-50%",                   y: "-50%",                  opacity: 1 }}
+        exit={{    scale: 0.06, x: `calc(-50% + ${ox}px)`, y: `calc(-50% + ${oy}px)`, opacity: 0 }}
+        transition={{ type: "spring", stiffness: 200, damping: 26, mass: 0.9 }}
         onClick={(e) => e.stopPropagation()}
       >
         <img
