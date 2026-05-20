@@ -1175,19 +1175,6 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   letter-spacing: 0.08em;
 }
 
-/* Waiting-for-preload hint */
-.book-wait-hint {
-  position: absolute;
-  bottom: 1.2vh;
-  left: 50%;
-  transform: translateX(-50%);
-  font-family: var(--font-serif);
-  font-size: 1.2vh;
-  font-style: italic;
-  color: rgba(80,40,20,0.38);
-  pointer-events: none;
-  white-space: nowrap;
-}
 
 /* Each page half */
 .book-page-side {
@@ -1227,11 +1214,10 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   width: 100%;
 }
 
-/* ensure react-pdf canvas is block; boost contrast for scanned text */
-.book-page-side canvas,
-.flip-face canvas {
+/* Rendered page images — warm aged-paper filter */
+.book-page-img {
   display: block;
-  filter: contrast(1.10) brightness(0.97);
+  filter: sepia(22%) contrast(1.05) brightness(0.93) saturate(0.78);
 }
 
 /* ── Flip card wrapper (perspective is set via Framer Motion transformPerspective) ── */
@@ -1296,27 +1282,7 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   background: linear-gradient(90deg, rgba(0,0,0,0.42) 0%, rgba(0,0,0,0.08) 30%, transparent 65%);
 }
 
-/* Controls bar below the spread — page counter only */
-.book-controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.9vh 2vh 0.7vh;
-  background: #ebe0cc;
-  border-top: 1px solid rgba(0,0,0,0.12);
-  border-radius: 0 0 3px 3px;
-}
-
-.book-page-label {
-  font-family: var(--font-sans);
-  font-size: 1.1vh;
-  color: rgba(80,40,20,0.5);
-  letter-spacing: 0.1em;
-  min-width: 10vh;
-  text-align: center;
-}
-
-/* Clickable half-page zones for navigation */
+/* Clickable half-page zones — invisible, no hover hints */
 .book-click-zone {
   position: absolute;
   top: 0;
@@ -1324,26 +1290,9 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   width: calc(50% - 4px);
   z-index: 20;
   cursor: pointer;
-  display: flex;
-  align-items: center;
 }
-.book-click-left  { left: 0;           justify-content: flex-start; }
-.book-click-right { right: 0;          justify-content: flex-end;   }
-
-/* Arrow hint — appears on hover */
-.book-click-arrow {
-  font-size: 4.5vh;
-  color: rgba(80,40,20,0.0);
-  padding: 0 1.8vh;
-  transition: color 0.22s ease, transform 0.18s ease;
-  line-height: 1;
-  user-select: none;
-}
-.book-click-zone.hinting .book-click-arrow {
-  color: rgba(80,40,20,0.28);
-}
-.book-click-left.hinting  .book-click-arrow { transform: translateX(-3px); }
-.book-click-right.hinting .book-click-arrow { transform: translateX(3px);  }
+.book-click-left  { left: 0;  }
+.book-click-right { right: 0; }
 
 /* ============================================================
    POSTER ZOOM OVERLAY
