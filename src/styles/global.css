@@ -1170,10 +1170,11 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   width: 100%;
 }
 
-/* ensure react-pdf canvas is block */
+/* ensure react-pdf canvas is block; boost contrast for scanned text */
 .book-page-side canvas,
 .flip-face canvas {
   display: block;
+  filter: contrast(1.10) brightness(0.97);
 }
 
 /* ── Flip card wrapper (perspective is set via Framer Motion transformPerspective) ── */
@@ -1238,35 +1239,16 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   background: linear-gradient(90deg, rgba(0,0,0,0.42) 0%, rgba(0,0,0,0.08) 30%, transparent 65%);
 }
 
-/* Controls bar below the spread */
+/* Controls bar below the spread — page counter only */
 .book-controls {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 2.5vh;
-  padding: 1vh 2vh 0.8vh;
+  padding: 0.9vh 2vh 0.7vh;
   background: #ebe0cc;
   border-top: 1px solid rgba(0,0,0,0.12);
   border-radius: 0 0 3px 3px;
 }
-
-.book-nav-btn {
-  width: 4.5vh;
-  height: 4.5vh;
-  border: none;
-  background: rgba(80,40,20,0.1);
-  color: rgba(80,40,20,0.7);
-  font-size: 3vh;
-  line-height: 1;
-  border-radius: 50%;
-  cursor: pointer;
-  transition: background 0.15s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.book-nav-btn:hover:not(:disabled) { background: rgba(80,40,20,0.18); }
-.book-nav-btn:disabled { opacity: 0.22; cursor: default; }
 
 .book-page-label {
   font-family: var(--font-sans);
@@ -1276,6 +1258,35 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   min-width: 10vh;
   text-align: center;
 }
+
+/* Clickable half-page zones for navigation */
+.book-click-zone {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: calc(50% - 4px);
+  z-index: 20;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+.book-click-left  { left: 0;           justify-content: flex-start; }
+.book-click-right { right: 0;          justify-content: flex-end;   }
+
+/* Arrow hint — appears on hover */
+.book-click-arrow {
+  font-size: 4.5vh;
+  color: rgba(80,40,20,0.0);
+  padding: 0 1.8vh;
+  transition: color 0.22s ease, transform 0.18s ease;
+  line-height: 1;
+  user-select: none;
+}
+.book-click-zone.hinting .book-click-arrow {
+  color: rgba(80,40,20,0.28);
+}
+.book-click-left.hinting  .book-click-arrow { transform: translateX(-3px); }
+.book-click-right.hinting .book-click-arrow { transform: translateX(3px);  }
 
 /* ============================================================
    POSTER ZOOM OVERLAY

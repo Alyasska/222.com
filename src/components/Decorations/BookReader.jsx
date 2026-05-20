@@ -9,8 +9,8 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   import.meta.url,
 ).toString();
 
-const FLIP_EASE = [0.455, 0.03, 0.515, 0.955];
-const FLIP_MS   = 680;
+const FLIP_EASE = [0.25, 0.1, 0.25, 1.0];
+const FLIP_MS   = 950;
 
 function BlankPage({ height }) {
   return <div className="book-blank-page" style={{ height }} />;
@@ -18,28 +18,38 @@ function BlankPage({ height }) {
 
 export default function BookReader({ book, onClose }) {
   const [numPages, setNumPages]   = useState(null);
-  const [spread, setSpread]       = useState(0);   // 0 = cover on right
-  const [flipDir, setFlipDir]     = useState(null); // null | 1 | -1
+  const [spread, setSpread]       = useState(0);
+  const [flipDir, setFlipDir]     = useState(null);
+  const [hoverZone, setHoverZone] = useState(null); // "left" | "right" | null
 
   useEffect(() => { setSpread(0); setNumPages(null); setFlipDir(null); }, [book.pdfPath]);
 
   const maxSpread = numPages ? Math.ceil(numPages / 2) - 1 : 0;
 
-  // Page numbers for the RESTING state
   const leftNum  = spread === 0 ? null : spread * 2;
   const rightNum = spread * 2 + 1;
 
-  // Pages shown UNDERNEATH the flip card while flipping
   const underLeft  = flipDir === -1 ? (spread - 1 === 0 ? null : (spread - 1) * 2) : leftNum;
   const underRight = flipDir ===  1 ? (spread + 1) * 2 + 1                         : rightNum;
 
-  // Flip card: front = outgoing page, back = incoming page
   const frontPage = flipDir ===  1 ? rightNum
                   : flipDir === -1 ? leftNum
                   : null;
   const backPage  = flipDir ===  1 ? (spread + 1) * 2
                   : flipDir === -1 ? (spread - 1) * 2 + 1
                   : null;
+
+  // Pages to silently preload (rendered off-screen)
+  const preloadPages = [];
+  if (numPages) {
+    const nextRight = (spread + 1) * 2 + 1;
+    const nextLeft  = (spread + 1) * 2;
+    const prevLeft  = spread > 1 ? (spread - 1) * 2 : null;
+    const prevRight = spread > 0 ? (spread - 1) * 2 + 1 : null;
+    [nextLeft, nextRight, prevLeft, prevRight].forEach(n => {
+      if (n && n >= 1 && n <= numPages) preloadPages.push(n);
+    });
+  }
 
   function flip(dir) {
     if (flipDir !== null) return;
@@ -73,6 +83,9 @@ export default function BookReader({ book, onClose }) {
       />
     );
   }
+
+  const canFlipLeft  = flipDir === null && spread > 0;
+  const canFlipRight = flipDir === null && spread < maxSpread;
 
   const label = numPages
     ? `${leftNum ?? 1}–${Math.min(rightNum, numPages)} / ${numPages}`
@@ -110,7 +123,14 @@ export default function BookReader({ book, onClose }) {
             </div>
           }
         >
-          {/* ── Spread + flip card ── */}
+          {/* Silent preload of adjacent pages */}
+          {preloadPages.map(n => (
+            <div key={`pre-${n}`} style={{ position: "absolute", opacity: 0, pointerEvents: "none", width: 0, height: 0, overflow: "hidden" }}>
+              <Page pageNumber={n} height={pH} renderAnnotationLayer={false} renderTextLayer={false} />
+            </div>
+          ))}
+
+          {/* Spread + flip card */}
           <div className="book-spread-wrapper">
 
             {/* Static pages underneath */}
@@ -124,7 +144,7 @@ export default function BookReader({ book, onClose }) {
               </div>
             </div>
 
-            {/* Flip card – absolutely covers one page half while animating */}
+            {/* Flip card */}
             <AnimatePresence>
               {flipDir !== null && (
                 <motion.div
@@ -135,13 +155,10 @@ export default function BookReader({ book, onClose }) {
                   exit={{ rotateY: flipDir > 0 ? -180 : 180 }}
                   transition={{ duration: FLIP_MS / 1000, ease: FLIP_EASE }}
                 >
-                  {/* Front face: outgoing page */}
                   <div className="flip-face flip-front-face">
                     {renderPage(frontPage, `ff-${frontPage}`, false)}
                     <div className={`flip-shadow ${flipDir > 0 ? "fshadow-fwd-front" : "fshadow-bwd-front"}`} />
                   </div>
-
-                  {/* Back face: incoming page */}
                   <div className="flip-face flip-back-face">
                     {renderPage(backPage, `fb-${backPage}`, false)}
                     <div className={`flip-shadow ${flipDir > 0 ? "fshadow-fwd-back" : "fshadow-bwd-back"}`} />
@@ -149,26 +166,34 @@ export default function BookReader({ book, onClose }) {
                 </motion.div>
               )}
             </AnimatePresence>
+
+            {/* Clickable page zones — go back (left) or forward (right) */}
+            {canFlipLeft && (
+              <div
+                className={`book-click-zone book-click-left${hoverZone === "left" ? " hinting" : ""}`}
+                onClick={() => flip(-1)}
+                onMouseEnter={() => setHoverZone("left")}
+                onMouseLeave={() => setHoverZone(null)}
+              >
+                <span className="book-click-arrow">‹</span>
+              </div>
+            )}
+            {canFlipRight && (
+              <div
+                className={`book-click-zone book-click-right${hoverZone === "right" ? " hinting" : ""}`}
+                onClick={() => flip(1)}
+                onMouseEnter={() => setHoverZone("right")}
+                onMouseLeave={() => setHoverZone(null)}
+              >
+                <span className="book-click-arrow">›</span>
+              </div>
+            )}
           </div>
         </Document>
 
-        {/* Controls */}
+        {/* Page counter only */}
         <div className="book-controls">
-          <motion.button
-            className="book-nav-btn"
-            onClick={() => flip(-1)}
-            disabled={flipDir !== null || spread === 0}
-            whileHover={{ scale: 1.12 }}
-            whileTap={{ scale: 0.88 }}
-          >‹</motion.button>
           <span className="book-page-label">{label}</span>
-          <motion.button
-            className="book-nav-btn"
-            onClick={() => flip(1)}
-            disabled={flipDir !== null || spread >= maxSpread}
-            whileHover={{ scale: 1.12 }}
-            whileTap={{ scale: 0.88 }}
-          >›</motion.button>
         </div>
       </motion.div>
     </>

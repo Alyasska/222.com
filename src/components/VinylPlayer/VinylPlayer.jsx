@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import Record from "./Record.jsx";
 import Tonearm from "./Tonearm.jsx";
 
@@ -7,30 +7,36 @@ export default function VinylPlayer({ activeSong, spinning, onPrev, onNext, isFl
     <div className="turntable">
       <div className="platter" />
 
-      <motion.div
+      {/* Plain div — layoutId animation is handled entirely by the inner motion.div */}
+      <div
         className="turntable-vinyl-wrap"
         onClick={spinning ? onFlip : undefined}
         style={{ cursor: spinning ? "pointer" : "default" }}
-        whileHover={spinning ? { scale: 1.03 } : {}}
-        whileTap={spinning   ? { scale: 0.97 } : {}}
-        transition={{ type: "spring", stiffness: 340, damping: 22 }}
         title={spinning ? "Click to flip to Side B" : undefined}
       >
-        {activeSong && (
-          <motion.div
-            layoutId={`vinyl-${activeSong.id}`}
-            layout
-            animate={{ rotateY: isFlipped ? 180 : 0 }}
-            transition={{
-              layout:  { type: "spring", stiffness: 72, damping: 13, mass: 1.2 },
-              rotateY: { type: "spring", stiffness: 110, damping: 16, mass: 0.9 },
-            }}
-            style={{ width: "100%", height: "100%", transformPerspective: 900 }}
-          >
-            <Record song={activeSong} spinning={spinning} />
-          </motion.div>
-        )}
-      </motion.div>
+        <AnimatePresence mode="popLayout">
+          {activeSong && (
+            <motion.div
+              key={activeSong.id}
+              layoutId={`vinyl-${activeSong.id}`}
+              layout
+              animate={{ rotateY: isFlipped ? 180 : 0, opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.72, y: -18, transition: { duration: 0.28, ease: "easeIn" } }}
+              transition={{
+                layout:  { type: "spring", stiffness: 72, damping: 13, mass: 1.2 },
+                rotateY: { type: "spring", stiffness: 110, damping: 16, mass: 0.9 },
+                opacity: { duration: 0.18 },
+                scale:   { duration: 0.28 },
+              }}
+              style={{ width: "100%", height: "100%", transformPerspective: 900 }}
+              whileHover={spinning ? { scale: 1.03 } : {}}
+              whileTap={spinning   ? { scale: 0.97 } : {}}
+            >
+              <Record song={activeSong} spinning={spinning} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
 
       <Tonearm playing={spinning} />
 
