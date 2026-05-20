@@ -1,23 +1,53 @@
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import BookReader from "./BookReader";
+
 const SCATTER_BOOKS = [
-  { title: "Mukagali Öleñderi", coverImage: "/222.com/covers/mukagali.png",
+  {
+    title: "Mukagali Öleñderi",
+    coverImage: "/222.com/covers/mukagali.png",
+    pdfPath: "/222.com/books/mukagali.pdf",
     a: "#7a3a2a", b: "#3a1808",
-    style: { left: "6vw", bottom: "8vh", width: "12vh", height: "17vh", transform: "rotate(-12deg)" } },
-  { title: "The Unbearable Lightness of Being", coverImage: "/222.com/covers/lightness.png",
+    rotation: -12,
+    style: { left: "6vw", bottom: "8vh", width: "12vh", height: "17vh" },
+  },
+  {
+    title: "The Unbearable Lightness of Being",
+    coverImage: "/222.com/covers/lightness.png",
+    pdfPath: "/222.com/books/lightness.pdf",
     a: "#2a3a58", b: "#0e1828",
-    style: { left: "17vw", bottom: "18vh", width: "12vh", height: "17vh", transform: "rotate(20deg)" } },
-  { title: "To the Lighthouse", coverImage: "/222.com/covers/lighthouse.png",
+    rotation: 20,
+    style: { left: "17vw", bottom: "18vh", width: "12vh", height: "17vh" },
+  },
+  {
+    title: "To the Lighthouse",
+    coverImage: "/222.com/covers/lighthouse.png",
+    pdfPath: "/222.com/books/lighthouse.pdf",
     a: "#5a2838", b: "#200810",
-    style: { right: "19vw", bottom: "6vh", width: "12vh", height: "17vh", transform: "rotate(8deg)" } },
+    rotation: 8,
+    style: { right: "19vw", bottom: "6vh", width: "12vh", height: "17vh" },
+  },
 ];
 
 export default function Books() {
+  const [openBook, setOpenBook] = useState(null);
+
   return (
     <>
       {SCATTER_BOOKS.map((b, i) => (
-        <div
+        <motion.div
           key={i}
           className="scatter-book"
-          style={{ ...b.style, "--book-a": b.a, "--book-b": b.b }}
+          style={{
+            ...b.style,
+            "--book-a": b.a,
+            "--book-b": b.b,
+            rotate: b.rotation,
+          }}
+          animate={{ opacity: openBook?.index === i ? 0 : 1 }}
+          whileHover={openBook ? {} : { scale: 1.07 }}
+          onClick={() => !openBook && setOpenBook({ ...b, index: i })}
+          transition={{ duration: 0.18 }}
         >
           {b.coverImage && (
             <img
@@ -34,8 +64,18 @@ export default function Books() {
             />
           )}
           <div className="title">{b.title}</div>
-        </div>
+        </motion.div>
       ))}
+
+      <AnimatePresence>
+        {openBook && (
+          <BookReader
+            key="reader"
+            book={openBook}
+            onClose={() => setOpenBook(null)}
+          />
+        )}
+      </AnimatePresence>
     </>
   );
 }

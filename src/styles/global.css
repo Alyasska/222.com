@@ -109,6 +109,10 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   pointer-events: none;
 }
 .poster {
+  pointer-events: auto;
+  cursor: pointer;
+}
+.poster {
   position: absolute;
   background:
     linear-gradient(160deg, var(--p-a, #2a3a48) 0%, var(--p-b, #0a1018) 100%);
@@ -551,7 +555,8 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
     inset 0 0 0 1px rgba(255,255,255,0.06),
     inset 0 0 1.6vh rgba(0,0,0,0.35),
     1vh 1.4vh 2vh rgba(0,0,0,0.55);
-  pointer-events: none;
+  pointer-events: auto;
+  cursor: pointer;
 }
 .scatter-book::before {
   content: '';
@@ -1067,3 +1072,217 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   45%       { opacity: 1.0; }
   80%       { opacity: 0.7; }
 }
+
+/* ============================================================
+   BOOK READER OVERLAY
+   ============================================================ */
+.book-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 110;
+  background: rgba(8, 5, 3, 0.88);
+  cursor: pointer;
+}
+
+.book-reader {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 111;
+  background: #f5e8d4;
+  border-radius: 2px;
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,0.18),
+    0.6vh 1.2vh 4vh rgba(0,0,0,0.55),
+    0 2vh 8vh rgba(0,0,0,0.38);
+  display: flex;
+  flex-direction: column;
+  max-height: 92vh;
+  overflow: hidden;
+  cursor: default;
+}
+
+.book-close {
+  position: absolute;
+  top: 0.8vh;
+  right: 0.8vh;
+  width: 3.2vh;
+  height: 3.2vh;
+  border-radius: 50%;
+  border: none;
+  background: rgba(80,40,20,0.12);
+  color: rgba(80,40,20,0.75);
+  font-size: 2.2vh;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  transition: background 0.15s;
+}
+.book-close:hover { background: rgba(80,40,20,0.22); }
+
+.book-title-bar {
+  padding: 1.2vh 4vh 0.7vh;
+  font-family: var(--font-serif);
+  font-size: 1.5vh;
+  font-style: italic;
+  color: rgba(80,40,20,0.55);
+  text-align: center;
+  border-bottom: 1px solid rgba(80,40,20,0.12);
+  flex-shrink: 0;
+}
+
+.book-page-area {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  overflow: hidden;
+  gap: 0.3vh;
+  padding: 0.8vh 0.3vh;
+  min-height: 0;
+}
+
+.book-page-wrap {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  position: relative;
+  min-height: 0;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(80,40,20,0.25) transparent;
+}
+
+.book-page-clip {
+  overflow: hidden;
+}
+
+.book-nav-btn {
+  flex-shrink: 0;
+  width: 4vh;
+  height: 7vh;
+  border: none;
+  background: rgba(80,40,20,0.08);
+  color: rgba(80,40,20,0.65);
+  font-size: 3.5vh;
+  line-height: 1;
+  border-radius: 0.6vh;
+  cursor: pointer;
+  transition: background 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.book-nav-btn:hover:not(:disabled) { background: rgba(80,40,20,0.16); }
+.book-nav-btn:disabled { opacity: 0.25; cursor: default; }
+
+.book-footer {
+  padding: 0.5vh 2vh 0.7vh;
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 1vh;
+  color: rgba(80,40,20,0.45);
+  letter-spacing: 0.12em;
+  border-top: 1px solid rgba(80,40,20,0.12);
+  flex-shrink: 0;
+}
+
+.book-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42vh;
+  padding: 4vh;
+  font-family: var(--font-serif);
+  font-size: 1.8vh;
+  color: rgba(80,40,20,0.45);
+  font-style: italic;
+}
+
+/* react-pdf canvas block */
+.book-page-wrap canvas {
+  display: block;
+}
+
+/* ============================================================
+   POSTER ZOOM OVERLAY
+   ============================================================ */
+.poster-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(8, 5, 3, 0.85);
+  cursor: pointer;
+}
+
+.poster-zoomed {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 101;
+  border-radius: 0.5vh;
+  overflow: hidden;
+  box-shadow:
+    inset 0 0 0 0.6vh rgba(255,240,220,0.85),
+    0 2vh 8vh rgba(0,0,0,0.75);
+  background: linear-gradient(160deg, var(--p-a, #2a3a48) 0%, var(--p-b, #0a1018) 100%);
+  cursor: default;
+  max-height: 88vh;
+  max-width: 92vw;
+}
+
+.poster-zoom-img {
+  display: block;
+  max-height: 82vh;
+  max-width: 88vw;
+  object-fit: contain;
+}
+
+.poster-zoom-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 2vh 2.5vh 1.8vh;
+  background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 100%);
+}
+
+.pz-title {
+  font-family: var(--font-serif);
+  font-size: 2.8vh;
+  color: rgba(255,240,220,0.95);
+  font-weight: 600;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+  line-height: 1.1;
+}
+
+.pz-year {
+  font-family: var(--font-sans);
+  font-size: 1.1vh;
+  color: rgba(255,240,220,0.65);
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  margin-top: 0.5vh;
+}
+
+.poster-close {
+  position: absolute;
+  top: 1vh;
+  right: 1vh;
+  width: 3.5vh;
+  height: 3.5vh;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0,0,0,0.42);
+  color: rgba(255,240,220,0.9);
+  font-size: 2.4vh;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  transition: background 0.15s;
+}
+.poster-close:hover { background: rgba(0,0,0,0.62); }
