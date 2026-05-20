@@ -295,10 +295,6 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   margin-left: -1.8vh;
   z-index: 1;
 }
-.shelf-slot:hover {
-  transform: rotateY(0deg) translateZ(2vh) translateY(-1vh);
-  z-index: 10;
-}
 .shelf-slot.selected {
   transform: rotateY(0deg);
   z-index: 10;
@@ -316,14 +312,6 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   overflow: hidden;
   z-index: 2;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.shelf-slot:hover .sleeve {
-  transform: translateY(-0.6vh);
-  box-shadow:
-    inset 0 0 0 1px rgba(255,255,255,0.1),
-    inset 0 -0.4vh 0.8vh rgba(0,0,0,0.4),
-    0.3vh 0.8vh 2vh rgba(0,0,0,0.6),
-    0 0 2vh var(--sleeve-glow, transparent);
 }
 .sleeve-art {
   position: absolute;
@@ -1183,8 +1171,71 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
 }
 
 /* ensure react-pdf canvas is block */
-.book-page-side canvas {
+.book-page-side canvas,
+.flip-face canvas {
   display: block;
+}
+
+/* ── Flip card wrapper (perspective is set via Framer Motion transformPerspective) ── */
+.book-spread-wrapper {
+  position: relative;
+}
+
+.flip-card {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  transform-style: preserve-3d;
+  z-index: 10;
+}
+/* Forward flip: right half, pivot at the spine (left edge of card) */
+.flip-card.flip-fwd {
+  left: calc(50% + 4px);
+  width: calc(50% - 4px);
+  transform-origin: left center;
+}
+/* Backward flip: left half, pivot at the spine (right edge of card) */
+.flip-card.flip-bwd {
+  right: calc(50% + 4px);
+  width: calc(50% - 4px);
+  transform-origin: right center;
+}
+
+.flip-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+  background: #f4e8d6;
+}
+
+/* Back face counter-rotated so content reads correctly when flipped */
+.flip-back-face {
+  transform: rotateY(180deg);
+}
+
+/* Shadow gradient simulating the paper curl at the fold */
+.flip-shadow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+/* Forward flip — front face: fold is on the LEFT (spine side) */
+.fshadow-fwd-front {
+  background: linear-gradient(90deg, rgba(0,0,0,0.42) 0%, rgba(0,0,0,0.08) 30%, transparent 65%);
+}
+/* Forward flip — back face: fold is on the RIGHT (spine is now to the right) */
+.fshadow-fwd-back {
+  background: linear-gradient(270deg, rgba(0,0,0,0.42) 0%, rgba(0,0,0,0.08) 30%, transparent 65%);
+}
+/* Backward flip — front face: fold is on the RIGHT */
+.fshadow-bwd-front {
+  background: linear-gradient(270deg, rgba(0,0,0,0.42) 0%, rgba(0,0,0,0.08) 30%, transparent 65%);
+}
+/* Backward flip — back face: fold is on the LEFT */
+.fshadow-bwd-back {
+  background: linear-gradient(90deg, rgba(0,0,0,0.42) 0%, rgba(0,0,0,0.08) 30%, transparent 65%);
 }
 
 /* Controls bar below the spread */

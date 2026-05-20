@@ -7,10 +7,13 @@ export default function VinylPlayer({ activeSong, spinning, onPrev, onNext, isFl
     <div className="turntable">
       <div className="platter" />
 
-      <div
+      <motion.div
         className="turntable-vinyl-wrap"
         onClick={spinning ? onFlip : undefined}
         style={{ cursor: spinning ? "pointer" : "default" }}
+        whileHover={spinning ? { scale: 1.03 } : {}}
+        whileTap={spinning   ? { scale: 0.97 } : {}}
+        transition={{ type: "spring", stiffness: 340, damping: 22 }}
         title={spinning ? "Click to flip to Side B" : undefined}
       >
         {activeSong && (
@@ -18,13 +21,16 @@ export default function VinylPlayer({ activeSong, spinning, onPrev, onNext, isFl
             layoutId={`vinyl-${activeSong.id}`}
             layout
             animate={{ rotateY: isFlipped ? 180 : 0 }}
-            transition={{ type: "spring", stiffness: 120, damping: 18, mass: 0.9 }}
+            transition={{
+              layout:  { type: "spring", stiffness: 72, damping: 13, mass: 1.2 },
+              rotateY: { type: "spring", stiffness: 110, damping: 16, mass: 0.9 },
+            }}
             style={{ width: "100%", height: "100%", transformPerspective: 900 }}
           >
             <Record song={activeSong} spinning={spinning} />
           </motion.div>
         )}
-      </div>
+      </motion.div>
 
       <Tonearm playing={spinning} />
 
@@ -33,16 +39,28 @@ export default function VinylPlayer({ activeSong, spinning, onPrev, onNext, isFl
           className="knob"
           onClick={onPrev}
           title="Previous"
-          whileTap={{ scale: 0.86, rotate: -8 }}
-          transition={{ type: "spring", stiffness: 400, damping: 24 }}
+          whileHover={{ scale: 1.16, filter: "brightness(1.35)" }}
+          whileTap={{   scale: 0.80, rotate: -16 }}
+          transition={{ type: "spring", stiffness: 420, damping: 20 }}
         />
-        <div className={`led ${activeSong ? "on" : ""}`} />
+        <motion.div
+          className={`led ${activeSong ? "on" : ""}`}
+          animate={activeSong
+            ? { opacity: [0.7, 1, 0.7], scale: [1, 1.14, 1] }
+            : { opacity: 0.3, scale: 1 }
+          }
+          transition={activeSong
+            ? { duration: 2.2, repeat: Infinity, ease: "easeInOut" }
+            : { duration: 0.3 }
+          }
+        />
         <motion.div
           className="knob"
           onClick={onNext}
           title="Next"
-          whileTap={{ scale: 0.86, rotate: 8 }}
-          transition={{ type: "spring", stiffness: 400, damping: 24 }}
+          whileHover={{ scale: 1.16, filter: "brightness(1.35)" }}
+          whileTap={{   scale: 0.80, rotate: 16 }}
+          transition={{ type: "spring", stiffness: 420, damping: 20 }}
         />
       </div>
     </div>

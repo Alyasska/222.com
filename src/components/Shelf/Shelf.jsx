@@ -1,19 +1,31 @@
 import { motion } from "framer-motion";
 import Record from "../VinylPlayer/Record.jsx";
 
+const SPRING = { type: "spring", stiffness: 72, damping: 13, mass: 1.2 };
+
 function ShelfSlot({ song, isSelected, onSelect, slotIndex }) {
   return (
-    <div
+    <motion.div
       className={`shelf-slot${isSelected ? " selected" : ""}`}
       style={{ "--slot-i": slotIndex }}
       onClick={() => onSelect(song.id)}
+      whileHover={isSelected ? {} : {
+        y: -10,
+        rotateY: 0,
+        z: 20,
+        transition: { type: "spring", stiffness: 260, damping: 18 },
+      }}
+      whileTap={isSelected ? {} : {
+        scale: 0.96,
+        transition: { duration: 0.08 },
+      }}
     >
       {!isSelected && (
         <div className="shelf-vinyl-wrap">
           <motion.div
             layoutId={`vinyl-${song.id}`}
             layout
-            transition={{ type: "spring", stiffness: 120, damping: 18, mass: 0.9 }}
+            transition={SPRING}
             style={{ width: "100%", height: "100%" }}
           >
             <Record song={song} spinning={false} />
@@ -21,12 +33,17 @@ function ShelfSlot({ song, isSelected, onSelect, slotIndex }) {
         </div>
       )}
 
-      <div
+      <motion.div
         className={`sleeve ${isSelected ? "sleeve-empty" : ""}`}
         style={{
-          "--sleeve-a": song.sleeveA,
-          "--sleeve-b": song.sleeveB,
+          "--sleeve-a":    song.sleeveA,
+          "--sleeve-b":    song.sleeveB,
           "--sleeve-glow": song.color,
+        }}
+        whileHover={isSelected ? {} : {
+          y: -4,
+          boxShadow: `0 1.2vh 3vh rgba(0,0,0,0.65), 0 0 2.4vh ${song.color}55`,
+          transition: { type: "spring", stiffness: 260, damping: 18 },
         }}
       >
         <div
@@ -43,8 +60,8 @@ function ShelfSlot({ song, isSelected, onSelect, slotIndex }) {
           <div className="t">{song.title}</div>
           <div className="a">{song.artist}</div>
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
 
