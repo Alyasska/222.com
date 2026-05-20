@@ -1074,13 +1074,13 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
 }
 
 /* ============================================================
-   BOOK READER OVERLAY
+   BOOK READER OVERLAY — two-page spread
    ============================================================ */
 .book-overlay {
   position: fixed;
   inset: 0;
   z-index: 110;
-  background: rgba(8, 5, 3, 0.88);
+  background: rgba(8, 5, 3, 0.9);
   cursor: pointer;
 }
 
@@ -1089,29 +1089,23 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   top: 50%;
   left: 50%;
   z-index: 111;
-  background: #f5e8d4;
-  border-radius: 2px;
-  box-shadow:
-    0 0 0 1px rgba(0,0,0,0.18),
-    0.6vh 1.2vh 4vh rgba(0,0,0,0.55),
-    0 2vh 8vh rgba(0,0,0,0.38);
   display: flex;
   flex-direction: column;
-  max-height: 92vh;
-  overflow: hidden;
   cursor: default;
+  /* shadow around the whole book object */
+  filter: drop-shadow(0 1.6vh 4vh rgba(0,0,0,0.7));
 }
 
 .book-close {
   position: absolute;
-  top: 0.8vh;
-  right: 0.8vh;
-  width: 3.2vh;
-  height: 3.2vh;
+  top: -3.8vh;
+  right: 0;
+  width: 3vh;
+  height: 3vh;
   border-radius: 50%;
   border: none;
-  background: rgba(80,40,20,0.12);
-  color: rgba(80,40,20,0.75);
+  background: rgba(255,240,220,0.15);
+  color: rgba(255,240,220,0.85);
   font-size: 2.2vh;
   line-height: 1;
   cursor: pointer;
@@ -1121,88 +1115,115 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   z-index: 5;
   transition: background 0.15s;
 }
-.book-close:hover { background: rgba(80,40,20,0.22); }
+.book-close:hover { background: rgba(255,240,220,0.28); }
 
-.book-title-bar {
-  padding: 1.2vh 4vh 0.7vh;
-  font-family: var(--font-serif);
-  font-size: 1.5vh;
-  font-style: italic;
-  color: rgba(80,40,20,0.55);
-  text-align: center;
-  border-bottom: 1px solid rgba(80,40,20,0.12);
-  flex-shrink: 0;
+/* The open book spread */
+.book-spread {
+  display: flex;
+  align-items: stretch;
+  border-radius: 1px 3px 3px 1px;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,0.35),
+    0 4px 24px rgba(0,0,0,0.5);
 }
 
-.book-page-area {
+.book-spread-loading {
+  background: #f4e8d6;
+  min-width: 60vw;
+  min-height: 55vh;
+  justify-content: center;
+  align-items: center;
+  border-radius: 1px 3px 3px 1px;
+}
+
+.book-loading-inner {
+  font-family: var(--font-serif);
+  font-size: 2vh;
+  font-style: italic;
+  color: rgba(80,40,20,0.45);
+}
+
+/* Each page half */
+.book-page-side {
+  background: #f4e8d6;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+}
+
+/* Shadow from spine falls onto the page faces */
+.book-page-left {
+  box-shadow: inset -10px 0 18px rgba(0,0,0,0.18), inset -2px 0 4px rgba(0,0,0,0.12);
+}
+.book-page-right {
+  box-shadow: inset 10px 0 18px rgba(0,0,0,0.18), inset 2px 0 4px rgba(0,0,0,0.12);
+}
+
+/* Spine — the fold in the middle */
+.book-spine {
+  width: 8px;
+  flex-shrink: 0;
+  background: linear-gradient(90deg,
+    rgba(0,0,0,0.32) 0%,
+    rgba(0,0,0,0.08) 35%,
+    rgba(255,240,220,0.18) 50%,
+    rgba(0,0,0,0.08) 65%,
+    rgba(0,0,0,0.28) 100%);
+  box-shadow:
+    -2px 0 6px rgba(0,0,0,0.22),
+     2px 0 6px rgba(0,0,0,0.22);
+}
+
+/* Blank page (first spread left, or last page if odd total) */
+.book-blank-page {
+  background: #f4e8d6;
+  width: 100%;
+}
+
+/* ensure react-pdf canvas is block */
+.book-page-side canvas {
+  display: block;
+}
+
+/* Controls bar below the spread */
+.book-controls {
   display: flex;
   align-items: center;
-  flex: 1;
-  overflow: hidden;
-  gap: 0.3vh;
-  padding: 0.8vh 0.3vh;
-  min-height: 0;
-}
-
-.book-page-wrap {
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  position: relative;
-  min-height: 0;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(80,40,20,0.25) transparent;
-}
-
-.book-page-clip {
-  overflow: hidden;
+  justify-content: center;
+  gap: 2.5vh;
+  padding: 1vh 2vh 0.8vh;
+  background: #ebe0cc;
+  border-top: 1px solid rgba(0,0,0,0.12);
+  border-radius: 0 0 3px 3px;
 }
 
 .book-nav-btn {
-  flex-shrink: 0;
-  width: 4vh;
-  height: 7vh;
+  width: 4.5vh;
+  height: 4.5vh;
   border: none;
-  background: rgba(80,40,20,0.08);
-  color: rgba(80,40,20,0.65);
-  font-size: 3.5vh;
+  background: rgba(80,40,20,0.1);
+  color: rgba(80,40,20,0.7);
+  font-size: 3vh;
   line-height: 1;
-  border-radius: 0.6vh;
+  border-radius: 50%;
   cursor: pointer;
   transition: background 0.15s;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.book-nav-btn:hover:not(:disabled) { background: rgba(80,40,20,0.16); }
-.book-nav-btn:disabled { opacity: 0.25; cursor: default; }
+.book-nav-btn:hover:not(:disabled) { background: rgba(80,40,20,0.18); }
+.book-nav-btn:disabled { opacity: 0.22; cursor: default; }
 
-.book-footer {
-  padding: 0.5vh 2vh 0.7vh;
-  text-align: center;
+.book-page-label {
   font-family: var(--font-sans);
-  font-size: 1vh;
-  color: rgba(80,40,20,0.45);
-  letter-spacing: 0.12em;
-  border-top: 1px solid rgba(80,40,20,0.12);
-  flex-shrink: 0;
-}
-
-.book-loading {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 42vh;
-  padding: 4vh;
-  font-family: var(--font-serif);
-  font-size: 1.8vh;
-  color: rgba(80,40,20,0.45);
-  font-style: italic;
-}
-
-/* react-pdf canvas block */
-.book-page-wrap canvas {
-  display: block;
+  font-size: 1.1vh;
+  color: rgba(80,40,20,0.5);
+  letter-spacing: 0.1em;
+  min-width: 10vh;
+  text-align: center;
 }
 
 /* ============================================================
@@ -1237,33 +1258,6 @@ button { font: inherit; color: inherit; background: none; border: none; cursor: 
   max-height: 82vh;
   max-width: 88vw;
   object-fit: contain;
-}
-
-.poster-zoom-info {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 2vh 2.5vh 1.8vh;
-  background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, transparent 100%);
-}
-
-.pz-title {
-  font-family: var(--font-serif);
-  font-size: 2.8vh;
-  color: rgba(255,240,220,0.95);
-  font-weight: 600;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.8);
-  line-height: 1.1;
-}
-
-.pz-year {
-  font-family: var(--font-sans);
-  font-size: 1.1vh;
-  color: rgba(255,240,220,0.65);
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  margin-top: 0.5vh;
 }
 
 .poster-close {

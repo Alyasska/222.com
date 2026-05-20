@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/AnnotationLayer.css";
@@ -9,41 +9,45 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   import.meta.url,
 ).toString();
 
+function Spinner() {
+  return (
+    <div className="book-spread book-spread-loading">
+      <div className="book-loading-inner">Opening book…</div>
+    </div>
+  );
+}
+
 export default function BookReader({ book, onClose }) {
   const [numPages, setNumPages] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [slideDir, setSlideDir] = useState(0);
-  const [isAnimating, setIsAnimating] = useState(false);
-  const prevPage = useRef(1);
+  const [spreadIndex, setSpreadIndex] = useState(0);
 
   useEffect(() => {
-    setCurrentPage(1);
+    setSpreadIndex(0);
     setNumPages(null);
-    setSlideDir(0);
   }, [book.pdfPath]);
 
-  function goToPage(delta) {
-    if (isAnimating) return;
-    const next = currentPage + delta;
-    if (next < 1 || (numPages !== null && next > numPages)) return;
-    setSlideDir(delta);
-    setIsAnimating(true);
-    prevPage.current = currentPage;
-    setCurrentPage(next);
-    setTimeout(() => setIsAnimating(false), 260);
-  }
+  const maxSpread = numPages ? Math.ceil(numPages / 2) - 1 : 0;
+  const leftPageNum = spreadIndex === 0 ? null : spreadIndex * 2;
+  const rightPageNum = spreadIndex * 2 + 1;
+
+  function prev() { if (spreadIndex > 0) setSpreadIndex((s) => s - 1); }
+  function next() { if (spreadIndex < maxSpread) setSpreadIndex((s) => s + 1); }
 
   useEffect(() => {
     function handleKey(e) {
-      if (e.key === "ArrowRight" || e.key === "PageDown") goToPage(1);
-      else if (e.key === "ArrowLeft" || e.key === "PageUp") goToPage(-1);
+      if (e.key === "ArrowRight" || e.key === "PageDown") next();
+      else if (e.key === "ArrowLeft" || e.key === "PageUp") prev();
       else if (e.key === "Escape") onClose();
     }
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
   });
 
-  const pageHeight = Math.min(window.innerHeight * 0.72, 760);
+  const pageH = Math.min(window.innerHeight * 0.73, 680);
+
+  const pageLabel = numPages
+    ? `${leftPageNum ?? 1}–${Math.min(rightPageNum, numPages)} / ${numPages}`
+    : "—";
 
   return (
     <>
@@ -65,68 +69,58 @@ export default function BookReader({ book, onClose }) {
         transition={{ type: "spring", stiffness: 220, damping: 26 }}
         onClick={(e) => e.stopPropagation()}
       >
-        <button className="book-close" onClick={onClose} aria-label="Close">
-          ×
-        </button>
+        <button className="book-close" onClick={onClose} aria-label="Close">×</button>
 
-        <div className="book-title-bar">{book.title}</div>
-
-        <div className="book-page-area">
-          <button
-            className="book-nav-btn"
-            onClick={() => goToPage(-1)}
-            disabled={currentPage <= 1}
-            aria-label="Previous page"
+        <Document
+          file={book.pdfPath}
+          onLoadSuccess={({ numPages }) => setNumPages(numPages)}
+          loading={<Spinner />}
+          error={<div className="book-spread book-spread-loading"><div className="book-loading-inner">Could not load PDF.</div></div>}
+        >
+          <motion.div
+            className="book-spread"
+            style={{ transformPerspective: 1400, rotateX: 2 }}
           >
-            ‹
-          </button>
+            {/* Left page */}
+            <div className="book-page-side book-page-left">
+              {leftPageNum ? (
+                <Page
+                  key={`L${leftPageNum}`}
+                  pageNumber={leftPageNum}
+                  height={pageH}
+                  renderAnnotationLayer={false}
+                  renderTextLayer={true}
+                />
+              ) : (
+                <div className="book-blank-page" style={{ height: pageH }} />
+              )}
+            </div>
 
-          <div className="book-page-wrap">
-            <Document
-              file={book.pdfPath}
-              onLoadSuccess={({ numPages }) => setNumPages(numPages)}
-              loading={<div className="book-loading">Loading book…</div>}
-              error={<div className="book-loading">Could not load PDF.</div>}
-            >
-              <div
-                className="book-page-clip"
-                style={{
-                  overflow: "hidden",
-                  position: "relative",
-                }}
-              >
-                <motion.div
-                  key={currentPage}
-                  initial={{
-                    x: slideDir === 0 ? 0 : slideDir > 0 ? "22%" : "-22%",
-                    opacity: slideDir === 0 ? 1 : 0,
-                  }}
-                  animate={{ x: 0, opacity: 1 }}
-                  transition={{ duration: 0.22, ease: "easeOut" }}
-                >
-                  <Page
-                    pageNumber={currentPage}
-                    height={pageHeight}
-                    renderAnnotationLayer={false}
-                    renderTextLayer={true}
-                  />
-                </motion.div>
-              </div>
-            </Document>
-          </div>
+            {/* Spine */}
+            <div className="book-spine" />
 
-          <button
-            className="book-nav-btn"
-            onClick={() => goToPage(1)}
-            disabled={numPages !== null && currentPage >= numPages}
-            aria-label="Next page"
-          >
-            ›
-          </button>
-        </div>
+            {/* Right page */}
+            <div className="book-page-side book-page-right">
+              {rightPageNum <= (numPages ?? Infinity) ? (
+                <Page
+                  key={`R${rightPageNum}`}
+                  pageNumber={rightPageNum}
+                  height={pageH}
+                  renderAnnotationLayer={false}
+                  renderTextLayer={true}
+                />
+              ) : (
+                <div className="book-blank-page" style={{ height: pageH }} />
+              )}
+            </div>
+          </motion.div>
+        </Document>
 
-        <div className="book-footer">
-          {numPages ? `${currentPage} / ${numPages}` : "—"}
+        {/* Controls */}
+        <div className="book-controls">
+          <button className="book-nav-btn" onClick={prev} disabled={spreadIndex === 0}>‹</button>
+          <span className="book-page-label">{pageLabel}</span>
+          <button className="book-nav-btn" onClick={next} disabled={spreadIndex >= maxSpread}>›</button>
         </div>
       </motion.div>
     </>

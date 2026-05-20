@@ -44,10 +44,6 @@ export default function PosterZoom({ poster, onClose }) {
           alt={poster.title}
           onError={(e) => { e.target.style.display = "none"; }}
         />
-        <div className="poster-zoom-info">
-          <div className="pz-title">{poster.title}</div>
-          <div className="pz-year">{poster.year}</div>
-        </div>
         <button className="poster-close" onClick={onClose} aria-label="Close">
           ×
         </button>
