@@ -41,7 +41,7 @@ export default function SecretCode({ onUnlock, bursting, onBurstDone }) {
 
   useEffect(() => {
     if (!bursting) return;
-    const t = setTimeout(onBurstDone, 3800);
+    const t = setTimeout(onBurstDone, 8400);
     return () => clearTimeout(t);
   }, [bursting, onBurstDone]);
 
@@ -66,12 +66,54 @@ export default function SecretCode({ onUnlock, bursting, onBurstDone }) {
           ))}
           <motion.div
             className="secret-toast"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 1.05 }}
-            transition={{ duration: 0.8 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, scale: 1.04 }}
+            transition={{ duration: 0.6 }}
           >
-            <div className="secret-toast-inner">2 · 1 · 3</div>
+            <div className="secret-toast-inner" style={{
+              fontSize: "clamp(0.95rem, 2.2vh, 2.6vh)",
+              lineHeight: 1.85,
+              textAlign: "center",
+              maxWidth: "62vw",
+              fontFamily: "var(--font-serif)",
+              color: "rgba(255,224,212,0.96)",
+              textShadow: "0 0 3vh rgba(255,143,163,0.45), 0 0 7vh rgba(255,143,163,0.22)",
+              letterSpacing: "-0.005em",
+            }}>
+              {[
+                { text: "There is one place in this city", delay: 0.5 },
+                { text: "where everything spins slowly",   delay: 0.95 },
+                { text: "and the whole world is below you.", delay: 1.4, gap: "1.4em" },
+                { text: "You have been there before —",     delay: 2.2 },
+                { text: "in some version of a dream.",      delay: 2.65, gap: "1.4em" },
+                { text: "Go there now.",                    delay: 3.5 },
+              ].map((line, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.7, delay: line.delay, ease: "easeOut" }}
+                  style={{ marginBottom: line.gap ?? "0.1em" }}
+                >
+                  {line.text}
+                </motion.div>
+              ))}
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.9, delay: 4.2, ease: "easeOut" }}
+                style={{
+                  fontStyle: "italic",
+                  marginTop: "0.5em",
+                  color: "#f4c030",
+                  opacity: 0.95,
+                  letterSpacing: "0.01em",
+                }}
+              >
+                He'll be waiting.
+              </motion.div>
+            </div>
           </motion.div>
         </>
       )}

@@ -50,6 +50,53 @@ export default function PosterZoom({ poster, onClose }) {
         <button className="poster-close" onClick={onClose} aria-label="Close">
           ×
         </button>
+
+        {poster.title === "AMÉLIE" && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.7, delay: 0.9 }}
+            style={{
+              position: "absolute",
+              bottom: 0, left: 0, right: 0,
+              background: "linear-gradient(to top, rgba(8,3,2,0.96) 0%, rgba(8,3,2,0.88) 55%, rgba(8,3,2,0) 100%)",
+              padding: "9vh 3vw 3vh",
+              fontFamily: "var(--font-serif)",
+              color: "rgba(255,240,210,0.95)",
+              textAlign: "center",
+              pointerEvents: "none",
+            }}
+          >
+            {[
+              { text: '"She likes to look for things no one else catches."', italic: true, color: "#f4c030", size: "clamp(0.85rem, 1.6vh, 1.8vh)", gap: "1.6vh", delay: 1.2 },
+              { text: "She dances alone in her room.",                        size: "clamp(0.75rem, 1.4vh, 1.6vh)", gap: "0.4vh", delay: 1.9 },
+              { text: "She debates fiercely. She usually wins.",              size: "clamp(0.75rem, 1.4vh, 1.6vh)", gap: "0.4vh", delay: 2.3 },
+              { text: "She works until the stars go quiet.",                  size: "clamp(0.75rem, 1.4vh, 1.6vh)", gap: "0.4vh", delay: 2.7 },
+              { text: "When she is angry, she breaks dishes.",                size: "clamp(0.75rem, 1.4vh, 1.6vh)", gap: "0.4vh", delay: 3.1 },
+              { text: "None of this is a flaw.",                              size: "clamp(0.75rem, 1.4vh, 1.6vh)", gap: "1.8vh", delay: 3.5 },
+              { text: "Now — find the thing that was heavy to carry.",       size: "clamp(0.7rem, 1.25vh, 1.45vh)", opacity: 0.78, gap: "0.3vh", delay: 4.3 },
+              { text: "Three kilograms of something red and tart.",          size: "clamp(0.7rem, 1.25vh, 1.45vh)", opacity: 0.78, gap: "0.3vh", delay: 4.7 },
+              { text: "The next note lives with them.",                       size: "clamp(0.7rem, 1.25vh, 1.45vh)", opacity: 0.78, gap: "0",     delay: 5.1 },
+            ].map((line, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: line.opacity ?? 1, y: 0 }}
+                transition={{ duration: 0.7, delay: line.delay, ease: "easeOut" }}
+                style={{
+                  fontStyle: line.italic ? "italic" : "normal",
+                  color: line.color ?? undefined,
+                  fontSize: line.size,
+                  marginBottom: line.gap,
+                  lineHeight: 1.5,
+                  letterSpacing: line.italic ? "0.02em" : "0.01em",
+                }}
+              >
+                {line.text}
+              </motion.div>
+            ))}
+          </motion.div>
+        )}
       </motion.div>
     </>
   );
