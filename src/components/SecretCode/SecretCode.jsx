@@ -87,7 +87,7 @@ export default function SecretCode({ onUnlock, bursting, onBurstDone }) {
                 { text: "and the whole world is below you.", delay: 1.4, gap: "1.4em" },
                 { text: "You have been there before —",     delay: 2.2 },
                 { text: "in some version of a dream.",      delay: 2.65, gap: "1.4em" },
-                { text: "Go there now.",                    delay: 3.5 },
+                { text: "Tonight. 7 PM.",                   delay: 3.5 },
               ].map((line, i) => (
                 <motion.div
                   key={i}
